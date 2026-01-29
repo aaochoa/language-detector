@@ -18,6 +18,7 @@ import type { SlangDictionary } from '../types';
 const slangData = require('./slang-dictionaries.data') as {
    SPANISH_SLANG: Set<string>;
    ENGLISH_SLANG: Set<string>;
+   FRENCH_SLANG: Set<string>;
    SLANG_WORDS: SlangDictionary;
 };
 
@@ -30,6 +31,11 @@ export const SPANISH_SLANG: Set<string> = slangData.SPANISH_SLANG;
  * English texting slang and informal abbreviations
  */
 export const ENGLISH_SLANG: Set<string> = slangData.ENGLISH_SLANG;
+
+/**
+ * French texting slang and informal abbreviations
+ */
+export const FRENCH_SLANG: Set<string> = slangData.FRENCH_SLANG;
 
 /**
  * Combined slang dictionaries export
