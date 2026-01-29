@@ -5,7 +5,7 @@
  * like SMS and chat messages.
  *
  * @example
- * import { getDetector } from 'language-detector';
+ * import { getDetector } from 'naive-bayes-language-detector';
  *
  * const detector = getDetector('./models/language-model.json');
  * const result = detector.detect('Hola, ¿cómo estás?');
