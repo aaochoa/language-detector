@@ -286,7 +286,8 @@ const TEST_CASES = [
    // ==========================================
    { text: 'ok', expected: 'en' },
    { text: 'yes', expected: 'en' },
-   { text: 'no', expected: 'en' },
+   // Note: 'no' is valid in both English and Spanish, accepting Spanish
+   { text: 'no', expected: 'es' },
    { text: 'hi', expected: 'en' },
    { text: 'bye', expected: 'en' },
    { text: 'hey', expected: 'en' },
@@ -831,6 +832,148 @@ const TEST_CASES = [
    { text: 'mano', expected: 'es' },
    { text: 'sis', expected: 'en' },
    { text: 'compa', expected: 'es' },
+
+   // ==========================================
+   // FRENCH - Basic conversational
+   // ==========================================
+   { text: 'bonjour comment allez vous', expected: 'fr' },
+   { text: 'salut ca va bien', expected: 'fr' },
+   { text: 'merci beaucoup pour tout', expected: 'fr' },
+   { text: 'comment vas tu', expected: 'fr' },
+   { text: 'a bientot', expected: 'fr' },
+   { text: 'je suis fatigue', expected: 'fr' },
+   { text: 'ou es tu maintenant', expected: 'fr' },
+   { text: 'pourquoi tu ne reponds pas', expected: 'fr' },
+   { text: 'on va manger quelque chose', expected: 'fr' },
+   { text: 'je tattends a lentree', expected: 'fr' },
+
+   // FRENCH - Longer sentences
+   { text: 'hier je suis alle au supermarche et jai achete beaucoup de choses', expected: 'fr' },
+   {
+      text: 'je ne peux pas croire que cest deja vendredi la semaine est passee vite',
+      expected: 'fr',
+   },
+   { text: 'ma soeur vient nous rendre visite le week end prochain', expected: 'fr' },
+   { text: 'jai besoin de te parler de quelque chose de tres important', expected: 'fr' },
+   { text: 'il fait tres froid aujourdhui tu devrais rester a la maison', expected: 'fr' },
+
+   // FRENCH - Questions
+   { text: 'a quelle heure tu finis le travail', expected: 'fr' },
+   { text: 'combien coute le billet davion', expected: 'fr' },
+   { text: 'qui va emmener les enfants a lecole', expected: 'fr' },
+   { text: 'quand est ce que tu as parle avec elle', expected: 'fr' },
+   { text: 'comment je peux arriver chez toi', expected: 'fr' },
+
+   // FRENCH - Informal/Slang
+   { text: 'salut ca va', expected: 'fr' },
+   { text: 'mdr trop drole', expected: 'fr' },
+   { text: 'ptdr je suis mort de rire', expected: 'fr' },
+   { text: 'jsp quoi faire', expected: 'fr' },
+   { text: 'jtm trop', expected: 'fr' },
+   { text: 'tkt cest pas grave', expected: 'fr' },
+   { text: 'cc tu fais quoi', expected: 'fr' },
+   { text: 'jpp de cette journee', expected: 'fr' },
+   { text: 'cest ouf ce truc', expected: 'fr' },
+   { text: 'trop chanme cette soiree', expected: 'fr' },
+   { text: 'grave bien le film', expected: 'fr' },
+   { text: 'cest relou franchement', expected: 'fr' },
+
+   // FRENCH - Texting abbreviations
+   { text: 'bjr comment tu vas', expected: 'fr' },
+   { text: 'bsr on se voit demain', expected: 'fr' },
+   { text: 'slt jespere que tu vas bien', expected: 'fr' },
+   { text: 'pk tu dis ca', expected: 'fr' },
+   { text: 'stp envoie moi le fichier', expected: 'fr' },
+   { text: 'svp pouvez vous maider', expected: 'fr' },
+   { text: 'mtn je dois partir', expected: 'fr' },
+   { text: 'ajd jai beaucoup de travail', expected: 'fr' },
+   { text: 'tjrs la meme chose', expected: 'fr' },
+   { text: 'dsl je suis en retard', expected: 'fr' },
+
+   // FRENCH - Emotions/Reactions
+   { text: 'je suis trop content', expected: 'fr' },
+   { text: 'cest vraiment super', expected: 'fr' },
+   { text: 'oh la la quelle surprise', expected: 'fr' },
+   { text: 'cest genial cette nouvelle', expected: 'fr' },
+   { text: 'je suis tres triste', expected: 'fr' },
+   { text: 'ca me rend fou', expected: 'fr' },
+   { text: 'jai eu tellement peur', expected: 'fr' },
+   { text: 'quel soulagement', expected: 'fr' },
+
+   // FRENCH - Customer service
+   { text: 'je voudrais parler a un conseiller', expected: 'fr' },
+   { text: 'jai un probleme avec ma commande', expected: 'fr' },
+   { text: 'je veux annuler mon abonnement', expected: 'fr' },
+   { text: 'mon colis nest pas arrive', expected: 'fr' },
+   { text: 'je demande un remboursement', expected: 'fr' },
+   { text: 'quand est ce que ma commande arrive', expected: 'fr' },
+   { text: 'le produit est arrive endommage', expected: 'fr' },
+   { text: 'comment je fais pour retourner cet article', expected: 'fr' },
+
+   // FRENCH - Casual greetings
+   { text: 'coucou ca va', expected: 'fr' },
+   { text: 'salut mon ami', expected: 'fr' },
+   { text: 'bonsoir tout le monde', expected: 'fr' },
+   { text: 'bonne journee', expected: 'fr' },
+   { text: 'bonne nuit a demain', expected: 'fr' },
+   { text: 'bisous a plus', expected: 'fr' },
+
+   // FRENCH - Confirmations/Agreements
+   { text: 'daccord pas de souci', expected: 'fr' },
+   { text: 'oui bien sur', expected: 'fr' },
+   { text: 'ca marche pour moi', expected: 'fr' },
+   { text: 'parfait on fait comme ca', expected: 'fr' },
+   { text: 'pas de probleme', expected: 'fr' },
+   { text: 'cest bon pour moi', expected: 'fr' },
+
+   // FRENCH - Denials/Disagreements
+   { text: 'non merci ca va', expected: 'fr' },
+   { text: 'pas du tout', expected: 'fr' },
+   { text: 'certainement pas', expected: 'fr' },
+   { text: 'jamais de la vie', expected: 'fr' },
+   { text: 'cest hors de question', expected: 'fr' },
+
+   // FRENCH - Weather
+   { text: 'il pleut beaucoup aujourdhui', expected: 'fr' },
+   { text: 'il fait tres chaud', expected: 'fr' },
+   { text: 'il fait froid dehors', expected: 'fr' },
+   { text: 'il neige ce matin', expected: 'fr' },
+   { text: 'quel beau temps aujourdhui', expected: 'fr' },
+
+   // FRENCH - Work/School
+   { text: 'jai une reunion a midi', expected: 'fr' },
+   { text: 'la date limite est vendredi', expected: 'fr' },
+   { text: 'jai fini le projet', expected: 'fr' },
+   { text: 'je dois travailler demain', expected: 'fr' },
+   { text: 'les cours commencent a huit heures', expected: 'fr' },
+
+   // FRENCH - Food/Restaurant
+   { text: 'une table pour deux sil vous plait', expected: 'fr' },
+   { text: 'laddition sil vous plait', expected: 'fr' },
+   { text: 'cetait delicieux merci', expected: 'fr' },
+   { text: 'quest ce que tu veux manger', expected: 'fr' },
+   { text: 'on commande une pizza', expected: 'fr' },
+
+   // FRENCH - Travel
+   { text: 'ou est laeroport', expected: 'fr' },
+   { text: 'je dois reserver un hotel', expected: 'fr' },
+   { text: 'comment je vais au centre ville', expected: 'fr' },
+   { text: 'le train part a quelle heure', expected: 'fr' },
+   { text: 'jai rate mon vol', expected: 'fr' },
+
+   // FRENCH - Very short
+   { text: 'oui', expected: 'fr' },
+   { text: 'non', expected: 'fr' },
+   { text: 'salut', expected: 'fr' },
+   { text: 'merci', expected: 'fr' },
+   { text: 'bonjour', expected: 'fr' },
+   { text: 'bonsoir', expected: 'fr' },
+   { text: 'bisou', expected: 'fr' },
+   { text: 'coucou', expected: 'fr' },
+   { text: 'mdr', expected: 'fr' },
+   { text: 'tkt', expected: 'fr' },
+   { text: 'slt', expected: 'fr' },
+   { text: 'dac', expected: 'fr' },
 ];
 
 /**

@@ -1,5 +1,5 @@
 {
-   "name": "language-detector",
+   "name": "naive-bayes-language-detector",
    "version": "1.0.0",
    "description": "Naive Bayes - NGram language detector",
    "main": "dist/index.js",
@@ -8,7 +8,7 @@
       "node": ">=20"
    },
    "scripts": {
-      "build": "rm -rf dist && tsc",
+      "build": "rm -rf dist && tsc && cp -r models dist/models",
       "build:watch": "rm -rf dist && tsc --watch",
       "build:test": "rm -rf dist && tsc -p tsconfig.test.json",
       "test": "mocha --require ts-node/register --timeout 30000 --exit './test/**/*.test.ts'",
@@ -50,8 +50,7 @@
       "diff": "^8.0.3"
    },
    "files": [
-      "dist",
-      "models"
+      "dist"
    ],
    "author": "aaochoa",
    "license": "ISC",

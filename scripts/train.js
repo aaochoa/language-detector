@@ -11,13 +11,13 @@ const { TfidfVectorizer, NaiveBayesClassifier, normalizeText, augmentText } = re
 
 // Configuration
 const CONFIG = {
-   languages: ['es', 'en'],
+   languages: ['es', 'en', 'fr'],
    testSplit: 0.2,
-   maxSamplesPerLanguage: 50000, // 50k per language = 100k total, fits in ~4GB RAM
+   maxSamplesPerLanguage: 20000, // 20k per language = 60k total, fits in ~2GB RAM
    vectorizerOptions: {
       minN: 2,
       maxN: 4, // 4-gram for better accuracy
-      maxFeatures: 3000, // Balance between accuracy and memory
+      maxFeatures: 2000, // Balance between accuracy and memory
    },
 };
 
