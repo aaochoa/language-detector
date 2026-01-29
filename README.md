@@ -1,11 +1,20 @@
 # Language Detector
 
-A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Supports English and Spanish with 99.7% accuracy on informal text.
+A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Supports English, Spanish, and French with 100% accuracy on test cases.
+
+## Supported Languages
+
+| Code | Language | Slang Support                                                    |
+| ---- | -------- | ---------------------------------------------------------------- |
+| `en` | English  | US, UK, Gen-Z, Gaming, AAVE, texting abbreviations               |
+| `es` | Spanish  | Mexico, Spain, Argentina, Colombia, Venezuela, Chile, Caribbean  |
+| `fr` | French   | Standard French, SMS/texting abbreviations (mdr, ptdr, slt, tkt) |
 
 ## Features
 
 - ✅ **Optimized for short text**: Works well with SMS and chat messages
 - ✅ **Handles informal language**: Supports slang, abbreviations, and texting patterns
+- ✅ **Multi-language support**: English, Spanish, and French
 - ✅ **Fast inference**: Lightweight model suitable for real-time applications
 - ✅ **TypeScript support**: Full TypeScript type definitions included
 - ✅ **Slang dictionary fallback**: Comprehensive slang detection for ambiguous cases
@@ -13,16 +22,18 @@ A **Naive Bayes language detector** optimized for short, informal text like SMS 
 ## Installation
 
 ```bash
-npm install language-detector
+npm install naive-bayes-language-detector
 ```
 
 ## Quick Start
 
 ```typescript
-import { getDetector } from 'language-detector';
+import { getDetector } from 'naive-bayes-language-detector';
 
 // Load the pre-trained model
-const detector = getDetector('./node_modules/language-detector/models/language-model.json');
+const detector = getDetector(
+   './node_modules/naive-bayes-language-detector/dist/models/language-model.json',
+);
 
 // Detect language
 const result = detector.detect('Hola, ¿cómo estás?');
@@ -31,12 +42,12 @@ console.log(result);
 //   language: 'es',
 //   confidence: 0.95,
 //   isReliable: true,
-//   probabilities: { es: 0.95, en: 0.05 },
+//   probabilities: { es: 0.95, en: 0.03, fr: 0.02 },
 //   source: 'ml'
 // }
 
 // Batch detection
-const results = detector.detectBatch(['hello', 'hola', 'buenos dias']);
+const results = detector.detectBatch(['hello', 'hola', 'bonjour', 'buenos dias']);
 ```
 
 ## API Reference
@@ -55,10 +66,10 @@ Detect the language of a single text.
 
 ```typescript
 interface DetectionResult {
-   language: string;        // Detected language code ('en', 'es')
-   confidence: number;      // Confidence score (0-1)
-   isReliable: boolean;     // True if confidence > 0.7
-   probabilities?: Record<string, number>;  // Probability per language
+   language: string; // Detected language code ('en', 'es')
+   confidence: number; // Confidence score (0-1)
+   isReliable: boolean; // True if confidence > 0.7
+   probabilities?: Record<string, number>; // Probability per language
    source?: 'ml' | 'slang' | 'slang-override' | 'combined';
 }
 ```
@@ -126,12 +137,12 @@ npm run evaluate -- -i
 Converts text to numerical vectors using character n-grams (2-4 characters).
 
 ```typescript
-import { TfidfVectorizer } from 'language-detector';
+import { TfidfVectorizer } from 'naive-bayes-language-detector';
 
 const vectorizer = new TfidfVectorizer({
-   minN: 2,      // Minimum n-gram size
-   maxN: 4,      // Maximum n-gram size
-   maxFeatures: 5000  // Vocabulary limit
+   minN: 2, // Minimum n-gram size
+   maxN: 4, // Maximum n-gram size
+   maxFeatures: 5000, // Vocabulary limit
 });
 
 vectorizer.fit(trainingTexts);
@@ -143,7 +154,7 @@ const vector = vectorizer.transform('hello world');
 Gaussian Naive Bayes classifier for language prediction.
 
 ```typescript
-import { NaiveBayesClassifier } from 'language-detector';
+import { NaiveBayesClassifier } from 'naive-bayes-language-detector';
 
 const classifier = new NaiveBayesClassifier();
 classifier.fit(vectors, labels);
@@ -160,7 +171,7 @@ For short/ambiguous texts, the detector falls back to a comprehensive slang dict
 ## Text Normalization
 
 ```typescript
-import { normalizeText, augmentText } from 'language-detector';
+import { normalizeText, augmentText } from 'naive-bayes-language-detector';
 
 // Normalize text (lowercase, remove URLs, emails, emojis)
 const normalized = normalizeText('Hello World! https://example.com');
@@ -201,7 +212,7 @@ import type {
    VectorizerData,
    ClassifierData,
    ModelData,
-} from 'language-detector';
+} from 'naive-bayes-language-detector';
 ```
 
 ## Development
