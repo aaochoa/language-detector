@@ -11,7 +11,7 @@ const readline = require('readline');
 const zlib = require('zlib');
 
 const CONFIG = {
-   languages: ['es', 'en'],
+   languages: ['es', 'en', 'fr'],
    maxSamplesPerLanguage: 500000, // Use up to 500k samples per language
    minTextLength: 5,
    maxTextLength: 500,
@@ -411,6 +411,28 @@ function getSampleData() {
          'im very tired today',
          'tomorrow i have to work',
          'this weekend were going to the movies',
+      ],
+      fr: [
+         'bonjour comment allez vous',
+         'salut ca va bien',
+         'merci beaucoup pour tout',
+         'je suis tres fatigue',
+         'ou es tu maintenant',
+         'quand est ce que tu arrives',
+         'pourquoi tu ne reponds pas',
+         'on va manger quelque chose',
+         'je tattends a lentree',
+         'je ne comprends pas ce que tu dis',
+         'tu peux repeter sil te plait',
+         'demain je dois travailler',
+         'ce week end on va au cinema',
+         'jai besoin daide avec ca',
+         'peux tu menvoyer les informations',
+         'a bientot a la prochaine',
+         'bonne journee mon ami',
+         'quest ce que tu fais ce soir',
+         'je taime beaucoup',
+         'cest vraiment super genial',
       ],
    };
 }

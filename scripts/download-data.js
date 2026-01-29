@@ -21,6 +21,7 @@ const DATASETS = {
       files: {
          es: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/es.txt.gz',
          en: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/en.txt.gz',
+         fr: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/fr.txt.gz',
       },
    },
 
@@ -31,6 +32,7 @@ const DATASETS = {
       files: {
          es: 'https://downloads.tatoeba.org/exports/per_language/spa/spa_sentences.tsv.bz2',
          en: 'https://downloads.tatoeba.org/exports/per_language/eng/eng_sentences.tsv.bz2',
+         fr: 'https://downloads.tatoeba.org/exports/per_language/fra/fra_sentences.tsv.bz2',
       },
    },
 
@@ -51,6 +53,7 @@ const DATASETS = {
       files: {
          es: 'https://downloads.wortschatz-leipzig.de/corpora/spa_news_2020_30K.tar.gz',
          en: 'https://downloads.wortschatz-leipzig.de/corpora/eng_news_2020_30K.tar.gz',
+         fr: 'https://downloads.wortschatz-leipzig.de/corpora/fra_news_2020_30K.tar.gz',
       },
    },
 
@@ -61,6 +64,7 @@ const DATASETS = {
       files: {
          es: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/es.txt.gz',
          en: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/en.txt.gz',
+         fr: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/fr.txt.gz',
       },
    },
 
@@ -72,6 +76,7 @@ const DATASETS = {
          // OPUS QED - Question-answer educational dialogues (informal)
          es: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/es.txt.gz',
          en: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/en.txt.gz',
+         fr: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/fr.txt.gz',
       },
    },
 
@@ -82,6 +87,7 @@ const DATASETS = {
       files: {
          en: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/en.txt.gz',
          es: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/es.txt.gz',
+         fr: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/fr.txt.gz',
       },
    },
 };
