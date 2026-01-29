@@ -24,6 +24,7 @@
  */
 const SPANISH_SLANG = new Set([
    // === Greetings & Farewells ===
+   'hola',
    'ola',
    'ols',
    'oli',
@@ -1069,12 +1070,38 @@ const SPANISH_SLANG = new Set([
    'salee', // okay (Mexican)
    'ni loco',
    'ni loca', // no way
+   'ni modo', // Mexican - no way / too bad
+   'de ninguna manera', // no way
    'que les vaya bien',
    'q les vaya bien', // take care (goodbye)
    'me sorprendiste',
    'me sorprendio', // you surprised me
    'no traigo',
    'no traigo efectivo', // I don't have cash
+   'me siento triste', // I feel sad
+   'me siento bien', // I feel good
+   'me siento mal', // I feel bad
+   'tome medicina', // I took medicine
+   'toma medicina', // take medicine
+   'mi primo', // my cousin
+   'mi prima',
+   'mi primo se caso', // my cousin got married
+   'se caso', // got married
+   'descarga la', // download the
+   'descarga la nueva version', // download the new version
+   'la nueva version', // the new version
+   'lleva un paraguas', // bring an umbrella
+   'esta filete', // Chilean - this is cool
+   'esta filete la comida', // Chilean - the food is great
+   'filete', // Chilean slang for cool
+   'la situacion', // the situation
+   'la situacion es', // the situation is
+   'la situacion es complicada', // the situation is complicated
+   'es complicada', // is complicated
+   'complicada', // complicated
+   'esta es informacion', // this is information
+   'esta es informacion importante', // this is important information
+   'informacion importante', // important information
 
    // === Regional - Spanish (Spain) ===
    'tio',
@@ -1816,6 +1843,12 @@ const ENGLISH_SLANG = new Set([
    'we play soccer on sunday',
    'have a nice day',
    'as per our previous discussion',
+   'count me in',
+   'later gator',
+   'i appreciate it',
+   'appreciate it',
+   'see ya later',
+   'see ya soon',
    'bro',
    'broo',
    'brooo',
@@ -3141,6 +3174,28 @@ const FRENCH_SLANG = new Set([
    'tu vas bien',
    'le film',
    'bien le film',
+   'il fait froid',
+   'il fait froid dehors',
+   'il fait chaud',
+   'il fait beau',
+   'fait froid',
+   'fait chaud',
+   'dehors',
+   'la date limite',
+   'la date limite est',
+   'la date limite est vendredi',
+   'date limite',
+   'date limite est vendredi',
+   'est vendredi',
+   'vendredi',
+   'je dois reserver',
+   'je dois reserver un hotel',
+   'reserver un hotel',
+   'un hotel',
+   'jai rate',
+   'jai rate mon vol',
+   'rate mon vol',
+   'mon vol',
 
    // === Questions & Responses ===
    'quoi',
@@ -3354,12 +3409,356 @@ const FRENCH_SLANG = new Set([
 ]);
 
 /**
+ * Italian texting slang and informal abbreviations
+ */
+const ITALIAN_SLANG = new Set([
+   // === Greetings & Farewells ===
+   'ciao',
+   'ciaoo',
+   'ciaooo',
+   'ciaoooo',
+   'salve',
+   'buongiorno',
+   'buonasera',
+   'buonanotte',
+   'arrivederci',
+   'addio',
+   'a presto',
+   'a dopo',
+   'ci vediamo',
+   'ci sentiamo',
+
+   // === Very common Italian words (disambiguation) ===
+   'bene',
+   'molto',
+   'sono',
+   'stanco',
+   'scusa',
+   'prego',
+   'grazie',
+   'mille',
+   'oggi',
+   'domani',
+   'ieri',
+   'adesso',
+   'subito',
+   'anche',
+   'perche',
+   'perché',
+   'quando',
+   'dove',
+   'cosa',
+   'come',
+   'chi',
+   'quale',
+
+   // === Italian-specific expressions ===
+   'che figata',
+   'che schifo',
+   'che bello',
+   'che bella',
+   'che sorpresa',
+   'che paura',
+   'che sollievo',
+   'che sfiga',
+   'e un casino',
+   'un casino',
+   'dov e',
+   'dov e l',
+   'dov e l aeroporto',
+   'l aeroporto',
+   'aeroporto',
+   'nessun problema',
+   'ok nessun problema',
+   'nessun',
+   'non se ne parla',
+   'se ne parla',
+   'xke',
+
+   // === Common abbreviations ===
+   'cmq',
+   'comunque',
+   'xche',
+   'xké',
+   'perche',
+   'perché',
+   'nn',
+   'non',
+   'sn',
+   'sono',
+   'ke',
+   'che',
+   'x',
+   'per',
+   'xo',
+   'però',
+   'qnd',
+   'quando',
+   'qnt',
+   'quanto',
+   'qlc',
+   'qualcosa',
+   'qlcn',
+   'qualcuno',
+   'tt',
+   'tutto',
+   'ttp',
+   'ti voglio bene',
+   'tvb',
+   'tvtb',
+   'ti voglio tanto bene',
+
+   // === Questions & Responses ===
+   'cosa',
+   'come',
+   'dove',
+   'quando',
+   'chi',
+   'quale',
+   'quanto',
+   'perche',
+   'come stai',
+   'cm stai',
+   'tutto bene',
+   'tutto ok',
+   'tutto a posto',
+
+   // === Pronouns & Common words ===
+   'io',
+   'tu',
+   'lui',
+   'lei',
+   'noi',
+   'voi',
+   'loro',
+   'questo',
+   'quello',
+   'questa',
+   'quella',
+   'sono',
+   'sei',
+   'siamo',
+   'siete',
+   'ho',
+   'hai',
+   'ha',
+   'abbiamo',
+   'avete',
+   'hanno',
+   'con',
+   'senza',
+   'in',
+   'su',
+   'per',
+   'tra',
+   'fra',
+   'ma',
+   'pero',
+   'quindi',
+   'allora',
+   'dunque',
+
+   // === Common verbs & phrases ===
+   'va bene',
+   'vabbene',
+   'vabbe',
+   'vabbè',
+   'ok va bene',
+   'si certo',
+   'certo',
+   'certamente',
+   'sicuro',
+   'sicuramente',
+   'grazie',
+   'grz',
+   'graz',
+   'grazie mille',
+   'prego',
+   'scusa',
+   'scusami',
+   'mi dispiace',
+   'perfetto',
+   'fantastico',
+   'bellissimo',
+   'benissimo',
+
+   // === Affirmatives & Negatives ===
+   'si',
+   'sì',
+   'sisi',
+   'sisisi',
+   'no',
+   'nono',
+   'nonono',
+   'niente',
+   'nulla',
+   'mai',
+   'sempre',
+   'forse',
+   'magari',
+   'assolutamente',
+
+   // === Emotions & Reactions ===
+   'bello',
+   'bella',
+   'bellissimo',
+   'bellissima',
+   'bravo',
+   'brava',
+   'forte',
+   'fortissimo',
+   'pazzesco',
+   'incredibile',
+   'fantastico',
+   'meraviglioso',
+   'terribile',
+   'orribile',
+   'che bello',
+   'che forte',
+   'che figata',
+   'che schifo',
+   'mamma mia',
+   'madonna',
+   'oddio',
+   'oh dio',
+   'cavolo',
+   'caspita',
+   'accidenti',
+   'porca miseria',
+
+   // === Laughing & Reactions ===
+   'ahah',
+   'ahaha',
+   'ahahah',
+   'ahahahah',
+   'haha',
+   'hahaha',
+   'lol',
+   'ahahahahah',
+
+   // === Time expressions ===
+   'adesso',
+   'ora',
+   'dopo',
+   'prima',
+   'oggi',
+   'domani',
+   'ieri',
+   'stasera',
+   'stanotte',
+   'stamattina',
+   'pomeriggio',
+   'settimana',
+   'mese',
+   'anno',
+   'subito',
+   'presto',
+   'tardi',
+
+   // === Informal expressions ===
+   'boh',
+   'mah',
+   'eh',
+   'uffa',
+   'basta',
+   'dai',
+   'daii',
+   'daiii',
+   'forza',
+   'andiamo',
+   'vamos',
+   'aspetta',
+   'aspè',
+   'senti',
+   'guarda',
+   'vedi',
+   'ecco',
+   'appunto',
+   'esatto',
+   'giusto',
+
+   // === Slang & Youth expressions ===
+   'figo',
+   'figa',
+   'fichissimo',
+   'fico',
+   'ganzo',
+   'sballo',
+   'sballato',
+   'mitico',
+   'mega',
+   'super',
+   'top',
+   'troppo forte',
+   'una cifra',
+   'un casino',
+   'un sacco',
+   'un botto',
+   'alla grande',
+   'alla fine',
+   'tipo',
+   'cioe',
+   'cioè',
+   'praticamente',
+   'insomma',
+
+   // === Regional expressions ===
+   'daje',
+   'aò',
+   'ao',
+   'anvedi',
+   'ammazza',
+   'uè',
+   'ue',
+   'minchia',
+   'belin',
+   'cribbio',
+
+   // === Food & Social ===
+   'mangiamo',
+   'pranzo',
+   'cena',
+   'colazione',
+   'aperitivo',
+   'caffè',
+   'caffe',
+   'pizza',
+   'pasta',
+   'gelato',
+   'birra',
+   'vino',
+
+   // === Common phrases ===
+   'che cosa',
+   'cosa fai',
+   'cosa c è',
+   'cosa ce',
+   'come va',
+   'come stai',
+   'tutto bene',
+   'sto bene',
+   'non lo so',
+   'non so',
+   'lo so',
+   'mi piace',
+   'ti amo',
+   'ti voglio bene',
+   'a domani',
+   'a dopo',
+   'buona giornata',
+   'buona serata',
+   'in bocca al lupo',
+   'crepi',
+]);
+
+/**
  * Combined slang dictionaries export
  */
 const SLANG_WORDS = {
    es: SPANISH_SLANG,
    en: ENGLISH_SLANG,
    fr: FRENCH_SLANG,
+   it: ITALIAN_SLANG,
 };
 
 module.exports = {
@@ -3367,4 +3766,5 @@ module.exports = {
    SPANISH_SLANG,
    ENGLISH_SLANG,
    FRENCH_SLANG,
+   ITALIAN_SLANG,
 };

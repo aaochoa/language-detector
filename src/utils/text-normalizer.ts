@@ -101,5 +101,25 @@ export function augmentText(text: string, lang: string): string[] {
       }
    }
 
+   if (lang === 'it') {
+      const abbreviated = text
+         .replace(/\bcomunque\b/gi, 'cmq')
+         .replace(/\bperché\b/gi, 'xké')
+         .replace(/\bperche\b/gi, 'xche')
+         .replace(/\bnon\b/gi, 'nn')
+         .replace(/\bche\b/gi, 'ke')
+         .replace(/\bquando\b/gi, 'qnd')
+         .replace(/\bquanto\b/gi, 'qnt')
+         .replace(/\bqualcosa\b/gi, 'qlc')
+         .replace(/\bqualcuno\b/gi, 'qlcn')
+         .replace(/\btutto\b/gi, 'tt')
+         .replace(/\bti voglio bene\b/gi, 'tvb')
+         .replace(/\bgrazie\b/gi, 'grz');
+
+      if (abbreviated !== text) {
+         variations.push(abbreviated);
+      }
+   }
+
    return variations;
 }

@@ -974,6 +974,147 @@ const TEST_CASES = [
    { text: 'tkt', expected: 'fr' },
    { text: 'slt', expected: 'fr' },
    { text: 'dac', expected: 'fr' },
+
+   // ==========================================
+   // ITALIAN - Basic conversational
+   // ==========================================
+   { text: 'ciao come stai', expected: 'it' },
+   { text: 'buongiorno amico', expected: 'it' },
+   { text: 'grazie mille per tutto', expected: 'it' },
+   { text: 'come va oggi', expected: 'it' },
+   { text: 'a presto ci vediamo', expected: 'it' },
+   { text: 'sono molto stanco', expected: 'it' },
+   { text: 'dove sei adesso', expected: 'it' },
+   { text: 'perche non rispondi', expected: 'it' },
+   { text: 'andiamo a mangiare qualcosa', expected: 'it' },
+   { text: 'ti aspetto all ingresso', expected: 'it' },
+
+   // ITALIAN - Longer sentences
+   {
+      text: 'ieri sono andato al supermercato e ho comprato molte cose per la cena',
+      expected: 'it',
+   },
+   { text: 'non posso credere che sia gia venerdi la settimana e passata veloce', expected: 'it' },
+   { text: 'mia sorella viene a trovarci il prossimo fine settimana', expected: 'it' },
+   { text: 'ho bisogno di parlarti di qualcosa di molto importante', expected: 'it' },
+   { text: 'fa molto freddo oggi dovresti restare a casa', expected: 'it' },
+
+   // ITALIAN - Questions
+   { text: 'a che ora finisci di lavorare', expected: 'it' },
+   { text: 'quanto costa il biglietto aereo', expected: 'it' },
+   { text: 'chi porta i bambini a scuola', expected: 'it' },
+   { text: 'quando hai parlato con lei', expected: 'it' },
+   { text: 'come posso arrivare a casa tua', expected: 'it' },
+
+   // ITALIAN - Informal/Slang
+   { text: 'ciao tutto bene', expected: 'it' },
+   { text: 'che figata', expected: 'it' },
+   { text: 'troppo forte', expected: 'it' },
+   { text: 'mamma mia che bello', expected: 'it' },
+   { text: 'dai andiamo', expected: 'it' },
+   { text: 'vabbe lascia stare', expected: 'it' },
+   { text: 'boh non lo so', expected: 'it' },
+   { text: 'che schifo', expected: 'it' },
+   { text: 'pazzesco incredibile', expected: 'it' },
+   { text: 'e un casino', expected: 'it' },
+   { text: 'alla grande', expected: 'it' },
+   { text: 'che sfiga', expected: 'it' },
+
+   // ITALIAN - Texting abbreviations
+   { text: 'cmq ci vediamo dopo', expected: 'it' },
+   { text: 'tvb tantissimo', expected: 'it' },
+   { text: 'xke non vieni', expected: 'it' },
+   { text: 'nn posso venire', expected: 'it' },
+   { text: 'tt bene grz', expected: 'it' },
+   { text: 'ke fai stasera', expected: 'it' },
+   { text: 'qnd arrivi', expected: 'it' },
+
+   // ITALIAN - Emotions/Reactions
+   { text: 'sono contentissimo', expected: 'it' },
+   { text: 'e fantastico', expected: 'it' },
+   { text: 'che sorpresa', expected: 'it' },
+   { text: 'sono molto triste', expected: 'it' },
+   { text: 'mi fa arrabbiare', expected: 'it' },
+   { text: 'che paura', expected: 'it' },
+   { text: 'che sollievo', expected: 'it' },
+   { text: 'non ci posso credere', expected: 'it' },
+
+   // ITALIAN - Customer service
+   { text: 'vorrei parlare con un operatore', expected: 'it' },
+   { text: 'ho un problema con il mio ordine', expected: 'it' },
+   { text: 'voglio cancellare il mio abbonamento', expected: 'it' },
+   { text: 'il mio pacco non e arrivato', expected: 'it' },
+   { text: 'chiedo un rimborso', expected: 'it' },
+   { text: 'quando arriva il mio ordine', expected: 'it' },
+   { text: 'il prodotto e arrivato danneggiato', expected: 'it' },
+   { text: 'come faccio a restituire questo articolo', expected: 'it' },
+
+   // ITALIAN - Casual greetings
+   { text: 'ciao a tutti', expected: 'it' },
+   { text: 'buonasera', expected: 'it' },
+   { text: 'buonanotte a domani', expected: 'it' },
+   { text: 'arrivederci', expected: 'it' },
+   { text: 'ci sentiamo', expected: 'it' },
+   { text: 'baci e abbracci', expected: 'it' },
+
+   // ITALIAN - Confirmations/Agreements
+   { text: 'va bene perfetto', expected: 'it' },
+   { text: 'si certo', expected: 'it' },
+   { text: 'ok nessun problema', expected: 'it' },
+   { text: 'assolutamente si', expected: 'it' },
+   { text: 'sicuramente', expected: 'it' },
+   { text: 'daccordo', expected: 'it' },
+
+   // ITALIAN - Denials/Disagreements
+   { text: 'no grazie', expected: 'it' },
+   { text: 'assolutamente no', expected: 'it' },
+   { text: 'neanche per sogno', expected: 'it' },
+   { text: 'mai e poi mai', expected: 'it' },
+   { text: 'non se ne parla', expected: 'it' },
+
+   // ITALIAN - Weather
+   { text: 'piove molto oggi', expected: 'it' },
+   { text: 'fa molto caldo', expected: 'it' },
+   { text: 'fa freddo fuori', expected: 'it' },
+   { text: 'nevica stamattina', expected: 'it' },
+   { text: 'che bella giornata', expected: 'it' },
+
+   // ITALIAN - Work/School
+   { text: 'ho una riunione a mezzogiorno', expected: 'it' },
+   { text: 'la scadenza e venerdi', expected: 'it' },
+   { text: 'ho finito il progetto', expected: 'it' },
+   { text: 'domani devo lavorare', expected: 'it' },
+   { text: 'le lezioni iniziano alle otto', expected: 'it' },
+
+   // ITALIAN - Food/Restaurant
+   { text: 'un tavolo per due per favore', expected: 'it' },
+   { text: 'il conto per favore', expected: 'it' },
+   { text: 'era delizioso grazie', expected: 'it' },
+   { text: 'cosa vuoi mangiare', expected: 'it' },
+   { text: 'ordiniamo una pizza', expected: 'it' },
+   { text: 'prendiamo un caffe', expected: 'it' },
+   { text: 'voglio un gelato', expected: 'it' },
+
+   // ITALIAN - Travel
+   { text: 'dov e l aeroporto', expected: 'it' },
+   { text: 'devo prenotare un albergo', expected: 'it' },
+   { text: 'come arrivo in centro', expected: 'it' },
+   { text: 'a che ora parte il treno', expected: 'it' },
+   { text: 'ho perso il volo', expected: 'it' },
+
+   // ITALIAN - Very short
+   { text: 'ciao', expected: 'it' },
+   { text: 'grazie', expected: 'it' },
+   { text: 'prego', expected: 'it' },
+   { text: 'scusa', expected: 'it' },
+   { text: 'bene', expected: 'it' },
+   { text: 'perfetto', expected: 'it' },
+   { text: 'bellissimo', expected: 'it' },
+   { text: 'fantastico', expected: 'it' },
+   { text: 'mamma mia', expected: 'it' },
+   { text: 'tvb', expected: 'it' },
+   { text: 'cmq', expected: 'it' },
+   { text: 'vabbe', expected: 'it' },
 ];
 
 /**
