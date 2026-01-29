@@ -1,5 +1,5 @@
 {
-   "name": "@intelepeer.ai/language-detector",
+   "name": "language-detector",
    "version": "1.0.0",
    "description": "Naive Bayes - NGram language detector",
    "main": "dist/index.js",
