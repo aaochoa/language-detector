@@ -49,10 +49,7 @@ module.exports = {
 
       // Node.js specific
       'node/no-unpublished-import': 'off',
-      'node/no-unsupported-features/es-syntax': [
-         'error',
-         { ignores: ['modules'] },
-      ],
+      'node/no-unsupported-features/es-syntax': ['error', { ignores: ['modules'] }],
       'node/no-missing-import': 'off',
 
       // TypeScript specific
@@ -78,6 +75,18 @@ module.exports = {
          },
          rules: {
             '@typescript-eslint/no-var-requires': 'off',
+         },
+      },
+      {
+         // Test files use tsconfig.test.json
+         files: ['test/**/*.ts'],
+         parserOptions: {
+            project: './tsconfig.test.json',
+         },
+         rules: {
+            // Allow Chai assertion style (e.g., expect(x).to.be.true)
+            'no-unused-expressions': 'off',
+            '@typescript-eslint/no-unused-expressions': 'off',
          },
       },
    ],
