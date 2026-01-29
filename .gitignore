@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Data files (large, should be downloaded)
+data/raw/
+data/processed/
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+debug.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Build artifacts
+dist/
+dist-test/
+
+# Environment
+.env
+.env.local
