@@ -25,7 +25,7 @@ const RELIABLE_CONFIDENCE_THRESHOLD = 0.7;
 function detectBySlang(text: string): SlangDetectionResult | null {
    const lowerText = text.toLowerCase();
    const words = lowerText.split(/\s+/);
-   const scores: Record<string, number> = { es: 0, en: 0 };
+   const scores: Record<string, number> = { es: 0, en: 0, fr: 0 };
 
    // Check each word against slang dictionaries
    words.forEach((word) => {
@@ -34,6 +34,9 @@ function detectBySlang(text: string): SlangDetectionResult | null {
       }
       if (SLANG_WORDS.en?.has(word)) {
          scores.en += 1;
+      }
+      if (SLANG_WORDS.fr?.has(word)) {
+         scores.fr += 1;
       }
    });
 
@@ -44,14 +47,18 @@ function detectBySlang(text: string): SlangDetectionResult | null {
    if (SLANG_WORDS.en?.has(lowerText)) {
       scores.en += 2;
    }
+   if (SLANG_WORDS.fr?.has(lowerText)) {
+      scores.fr += 2;
+   }
 
-   const total = scores.es + scores.en;
+   const total = scores.es + scores.en + scores.fr;
    if (total === 0) {
       return null;
    }
 
-   const winner = scores.es > scores.en ? 'es' : 'en';
-   const confidence = Math.max(scores.es, scores.en) / total;
+   // Find language with highest score
+   const winner = Object.entries(scores).reduce((a, b) => (b[1] > a[1] ? b : a))[0];
+   const confidence = Math.max(scores.es, scores.en, scores.fr) / total;
 
    return { language: winner, confidence, scores };
 }

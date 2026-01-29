@@ -81,5 +81,25 @@ export function augmentText(text: string, lang: string): string[] {
       }
    }
 
+   if (lang === 'fr') {
+      const abbreviated = text
+         .replace(/\bsalut\b/gi, 'slt')
+         .replace(/\bbonjour\b/gi, 'bjr')
+         .replace(/\bbonsoir\b/gi, 'bsr')
+         .replace(/\bje ne sais pas\b/gi, 'jsp')
+         .replace(/\bje t'aime\b/gi, 'jtm')
+         .replace(/\bt'inquiète\b/gi, 'tkt')
+         .replace(/\bmaintenant\b/gi, 'mtn')
+         .replace(/\btoujours\b/gi, 'tjrs')
+         .replace(/\bs'il te plaît\b/gi, 'stp')
+         .replace(/\bs'il vous plaît\b/gi, 'svp')
+         .replace(/\bpourquoi\b/gi, 'pk')
+         .replace(/\bbeaucoup\b/gi, 'bcp');
+
+      if (abbreviated !== text) {
+         variations.push(abbreviated);
+      }
+   }
+
    return variations;
 }
