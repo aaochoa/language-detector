@@ -22,10 +22,8 @@
       "prepublishOnly": "npm run build",
       "prepare": "husky"
    },
-   "dependencies": {
-      "axios": "^1.6.0"
-   },
    "devDependencies": {
+      "axios": "^1.6.0",
       "@types/chai": "^4.3.16",
       "@types/mocha": "^10.0.6",
       "@types/node": "^20.14.0",
@@ -57,6 +55,21 @@
    ],
    "author": "aaochoa",
    "license": "ISC",
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/aaochoa/language-detector.git"
+   },
+   "bugs": {
+      "url": "https://github.com/aaochoa/language-detector/issues"
+   },
+   "homepage": "https://github.com/aaochoa/language-detector#readme",
+   "exports": {
+      ".": {
+         "types": "./dist/index.d.ts",
+         "require": "./dist/index.js",
+         "default": "./dist/index.js"
+      }
+   },
    "keywords": [
       "language-detection",
       "naive-bayes",
