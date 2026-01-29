@@ -9,9 +9,10 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 const zlib = require('zlib');
+const { execSync } = require('child_process');
 
 const CONFIG = {
-   languages: ['es', 'en', 'fr'],
+   languages: ['es', 'en', 'fr', 'it'],
    maxSamplesPerLanguage: 500000, // Use up to 500k samples per language
    minTextLength: 5,
    maxTextLength: 500,
@@ -98,17 +99,44 @@ async function processOpenSubtitles(lang) {
 }
 
 /**
+ * Decompress a .bz2 file using bunzip2 command
+ */
+function decompressBz2(inputPath, outputPath) {
+   try {
+      console.log(`  Decompressing: ${path.basename(inputPath)}`);
+      execSync(`bunzip2 -k -c "${inputPath}" > "${outputPath}"`, { stdio: 'pipe' });
+      return true;
+   } catch (error) {
+      console.log(`  Warning: Could not decompress ${inputPath}: ${error.message}`);
+      console.log(`  Install bzip2: sudo apt-get install bzip2`);
+      return false;
+   }
+}
+
+/**
  * Process Tatoeba TSV file
  * Format: id \t lang \t text
  */
 async function processTatoeba(lang) {
-   // Tatoeba files can be: lang.tsv, lang (decompressed from .bz2), or lang.tsv.bz2
-   const files = [
-      path.join(RAW_DIR, 'tatoeba', `${lang}.tsv`),
-      path.join(RAW_DIR, 'tatoeba', `${lang}`), // Decompressed file without extension
-   ];
+   // Tatoeba files can be: lang.tsv, lang (decompressed from .bz2), or lang.bz2
+   const tsvPath = path.join(RAW_DIR, 'tatoeba', `${lang}.tsv`);
+   const decompressedPath = path.join(RAW_DIR, 'tatoeba', `${lang}`);
+   const bz2Path = path.join(RAW_DIR, 'tatoeba', `${lang}.bz2`);
 
-   const filePath = findExistingFile(files);
+   let filePath = null;
+
+   // Check for existing decompressed files first
+   if (fs.existsSync(tsvPath)) {
+      filePath = tsvPath;
+   } else if (fs.existsSync(decompressedPath)) {
+      filePath = decompressedPath;
+   } else if (fs.existsSync(bz2Path)) {
+      // Decompress .bz2 file on-the-fly
+      const outputPath = decompressedPath;
+      if (decompressBz2(bz2Path, outputPath)) {
+         filePath = outputPath;
+      }
+   }
 
    if (!filePath) {
       console.log(`  No Tatoeba data for ${lang}`);
@@ -433,6 +461,28 @@ function getSampleData() {
          'quest ce que tu fais ce soir',
          'je taime beaucoup',
          'cest vraiment super genial',
+      ],
+      it: [
+         'ciao come stai',
+         'buongiorno amico mio',
+         'grazie mille per tutto',
+         'sono molto stanco',
+         'dove sei adesso',
+         'quando arrivi',
+         'perche non rispondi',
+         'andiamo a mangiare qualcosa',
+         'ti aspetto all ingresso',
+         'non capisco cosa dici',
+         'puoi ripetere per favore',
+         'domani devo lavorare',
+         'questo fine settimana andiamo al cinema',
+         'ho bisogno di aiuto con questo',
+         'puoi mandarmi le informazioni',
+         'a presto ci vediamo',
+         'buona giornata amico',
+         'cosa fai stasera',
+         'ti amo tanto',
+         'e davvero fantastico',
       ],
    };
 }
