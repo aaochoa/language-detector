@@ -24,6 +24,7 @@ const RELIABLE_CONFIDENCE_THRESHOLD = 0.7;
  */
 function detectBySlang(text: string): SlangDetectionResult | null {
    const lowerText = text.toLowerCase();
+   const normalizedLower = normalizeText(text).toLowerCase();
    const words = lowerText.split(/\s+/);
    const scores: Record<string, number> = { es: 0, en: 0, fr: 0, it: 0, pt: 0 };
 
@@ -46,22 +47,25 @@ function detectBySlang(text: string): SlangDetectionResult | null {
       }
    });
 
-   // Check entire text for multi-word slang
-   if (SLANG_WORDS.es?.has(lowerText)) {
-      scores.es += 2;
-   }
-   if (SLANG_WORDS.en?.has(lowerText)) {
-      scores.en += 2;
-   }
-   if (SLANG_WORDS.fr?.has(lowerText)) {
-      scores.fr += 2;
-   }
-   if (SLANG_WORDS.it?.has(lowerText)) {
-      scores.it += 2;
-   }
-   if (SLANG_WORDS.pt?.has(lowerText)) {
-      scores.pt += 2;
-   }
+   // Check entire text for multi-word slang (both raw and normalized)
+   const textsToCheck = [lowerText, normalizedLower];
+   textsToCheck.forEach((txt) => {
+      if (SLANG_WORDS.es?.has(txt)) {
+         scores.es += 2;
+      }
+      if (SLANG_WORDS.en?.has(txt)) {
+         scores.en += 2;
+      }
+      if (SLANG_WORDS.fr?.has(txt)) {
+         scores.fr += 2;
+      }
+      if (SLANG_WORDS.it?.has(txt)) {
+         scores.it += 2;
+      }
+      if (SLANG_WORDS.pt?.has(txt)) {
+         scores.pt += 2;
+      }
+   });
 
    const total = scores.es + scores.en + scores.fr + scores.it + scores.pt;
    if (total === 0) {
