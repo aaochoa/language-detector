@@ -1,8 +1,13 @@
 /* eslint-disable no-console */
 /**
- * Train the language detection model
+ * Train the language detection model with batch processing
  *
  * Usage: npm run train
+ *
+ * This version uses batch processing to reduce memory usage:
+ * 1. Loads data one language at a time
+ * 2. Builds vocabulary incrementally
+ * 3. Trains classifier in batches
  */
 
 const fs = require('fs');
@@ -13,11 +18,12 @@ const { TfidfVectorizer, NaiveBayesClassifier, normalizeText, augmentText } = re
 const CONFIG = {
    languages: ['es', 'en', 'fr', 'it', 'pt'],
    testSplit: 0.2,
-   maxSamplesPerLanguage: 12000, // 12k per language = 60k total, fits in ~2GB RAM
+   maxSamplesPerLanguage: 15000, // Can use more samples with batch processing
+   batchSize: 2000, // Process this many samples at a time
    vectorizerOptions: {
       minN: 2,
-      maxN: 4, // 4-gram for better accuracy
-      maxFeatures: 2000, // Balance between accuracy and memory
+      maxN: 5, // 5-gram for better language discrimination
+      maxFeatures: 5000, // Larger vocabulary for better accuracy
    },
 };
 
@@ -34,79 +40,167 @@ function ensureDir(dirPath) {
 }
 
 /**
- * Load training data from files
+ * Load and shuffle samples for a single language
+ * @param {string} lang - Language code
+ * @param {number} maxSamples - Maximum samples to load
+ * @returns {Array<{text: string, lang: string}>} Array of samples
  */
-function loadTrainingData() {
-   const data = {};
+function loadLanguageData(lang, maxSamples) {
+   const filePath = path.join(PROCESSED_DIR, `${lang}.json`);
 
-   CONFIG.languages.forEach((lang) => {
-      const filePath = path.join(PROCESSED_DIR, `${lang}.json`);
+   if (!fs.existsSync(filePath)) {
+      console.warn(`No data file found for ${lang}: ${filePath}`);
+      return [];
+   }
 
-      if (fs.existsSync(filePath)) {
-         let texts = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+   let texts = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-         // Limit samples to prevent memory issues
-         if (CONFIG.maxSamplesPerLanguage && texts.length > CONFIG.maxSamplesPerLanguage) {
-            // Shuffle and take subset
-            texts = texts.sort(() => Math.random() - 0.5).slice(0, CONFIG.maxSamplesPerLanguage);
-            console.log(`Loaded ${texts.length} ${lang} samples (limited from ${texts.length})`);
-         } else {
-            console.log(`Loaded ${texts.length} ${lang} samples`);
-         }
-         data[lang] = texts;
-      } else {
-         console.warn(`No data file found for ${lang}: ${filePath}`);
-         data[lang] = [];
-      }
-   });
+   // Shuffle
+   texts = texts.sort(() => Math.random() - 0.5);
 
-   return data;
+   // Limit samples
+   if (maxSamples && texts.length > maxSamples) {
+      texts = texts.slice(0, maxSamples);
+   }
+
+   console.log(`Loaded ${texts.length} ${lang} samples`);
+
+   return texts.map((text) => ({ text, lang }));
 }
 
 /**
- * Prepare training and test sets
+ * Collect all texts for vocabulary building (first pass)
  */
-function prepareDatasets(dataByLanguage) {
-   const trainTexts = [];
-   const trainLabels = [];
-   const testTexts = [];
-   const testLabels = [];
+function collectTextsForVocabulary() {
+   const allTexts = [];
+   const testData = { texts: [], labels: [] };
 
-   Object.entries(dataByLanguage).forEach(([lang, texts]) => {
-      // Shuffle texts
-      const shuffled = texts.sort(() => Math.random() - 0.5);
+   CONFIG.languages.forEach((lang) => {
+      const samples = loadLanguageData(lang, CONFIG.maxSamplesPerLanguage);
+      const splitIdx = Math.floor(samples.length * (1 - CONFIG.testSplit));
 
-      // Split into train/test
-      const splitIdx = Math.floor(shuffled.length * (1 - CONFIG.testSplit));
-      const trainPortion = shuffled.slice(0, splitIdx);
-      const testPortion = shuffled.slice(splitIdx);
-
-      // Add to training set with augmentation
-      trainPortion.forEach((text) => {
-         const normalized = normalizeText(text);
+      // Process training portion
+      samples.slice(0, splitIdx).forEach((sample) => {
+         const normalized = normalizeText(sample.text);
          if (normalized.length >= 3) {
-            const variations = augmentText(normalized, lang);
-            variations.forEach((variation) => {
-               trainTexts.push(variation);
-               trainLabels.push(lang);
-            });
+            allTexts.push(normalized);
          }
       });
 
-      // Add to test set (no augmentation)
-      testPortion.forEach((text) => {
-         const normalized = normalizeText(text);
+      // Collect test data
+      samples.slice(splitIdx).forEach((sample) => {
+         const normalized = normalizeText(sample.text);
          if (normalized.length >= 3) {
-            testTexts.push(normalized);
-            testLabels.push(lang);
+            testData.texts.push(normalized);
+            testData.labels.push(lang);
          }
       });
    });
 
-   console.log(`Training samples: ${trainTexts.length}`);
-   console.log(`Test samples: ${testTexts.length}`);
+   console.log(`Collected ${allTexts.length} texts for vocabulary`);
+   console.log(`Collected ${testData.texts.length} test samples`);
 
-   return { trainTexts, trainLabels, testTexts, testLabels };
+   return { vocabularyTexts: allTexts, testData };
+}
+
+/**
+ * Process a single batch of samples
+ */
+function processBatch(batch, lang, vectorizer, stats) {
+   batch.forEach((sample) => {
+      const normalized = normalizeText(sample.text);
+      if (normalized.length >= 3) {
+         const variations = augmentText(normalized, lang);
+         variations.forEach((variation) => {
+            const vector = vectorizer.transform(variation);
+
+            stats.classCounts[lang] += 1;
+            stats.totalSamples += 1;
+
+            vector.forEach((value, idx) => {
+               stats.featureSums[lang][idx] += value;
+               stats.featureSumSquares[lang][idx] += value * value;
+            });
+         });
+      }
+   });
+}
+
+/**
+ * Train classifier in batches to reduce memory usage
+ */
+function trainInBatches(vectorizer) {
+   console.log('\nTraining classifier in batches...');
+
+   // Accumulate statistics for Naive Bayes
+   const stats = {
+      classCounts: {},
+      featureSums: {},
+      featureSumSquares: {},
+      totalSamples: 0,
+   };
+
+   CONFIG.languages.forEach((lang) => {
+      stats.classCounts[lang] = 0;
+      stats.featureSums[lang] = new Array(CONFIG.vectorizerOptions.maxFeatures).fill(0);
+      stats.featureSumSquares[lang] = new Array(CONFIG.vectorizerOptions.maxFeatures).fill(0);
+   });
+
+   // Process each language
+   CONFIG.languages.forEach((lang) => {
+      const samples = loadLanguageData(lang, CONFIG.maxSamplesPerLanguage);
+      const splitIdx = Math.floor(samples.length * (1 - CONFIG.testSplit));
+      const trainSamples = samples.slice(0, splitIdx);
+
+      console.log(`  Processing ${lang}: ${trainSamples.length} training samples`);
+
+      // Process in batches
+      let batchStart = 0;
+      while (batchStart < trainSamples.length) {
+         const batch = trainSamples.slice(batchStart, batchStart + CONFIG.batchSize);
+         processBatch(batch, lang, vectorizer, stats);
+         batchStart += CONFIG.batchSize;
+      }
+
+      if (global.gc) {
+         global.gc();
+      }
+   });
+
+   // Build classifier from accumulated statistics
+   console.log('\nBuilding classifier from statistics...');
+   const classifier = new NaiveBayesClassifier();
+
+   // Compute means and variances
+   const featureMeans = {};
+   const featureVariances = {};
+   const classPriors = {};
+
+   CONFIG.languages.forEach((lang) => {
+      const count = stats.classCounts[lang];
+      classPriors[lang] = count / stats.totalSamples;
+
+      featureMeans[lang] = stats.featureSums[lang].map((sum) => sum / count);
+      featureVariances[lang] = stats.featureSumSquares[lang].map((sumSq, idx) => {
+         const mean = featureMeans[lang][idx];
+         const variance = sumSq / count - mean * mean;
+         // Add smoothing to prevent zero variance
+         return Math.max(variance, 1e-9);
+      });
+   });
+
+   // Load computed statistics into classifier
+   classifier._classPriors = classPriors;
+   classifier._featureMeans = featureMeans;
+   classifier._featureVariances = featureVariances;
+   classifier._classes = CONFIG.languages;
+   classifier._fitted = true;
+
+   console.log(
+      `Trained on ${stats.totalSamples} samples across ${CONFIG.languages.length} classes`,
+   );
+
+   return { classifier, totalSamples: stats.totalSamples };
 }
 
 /**
@@ -166,40 +260,48 @@ function evaluateModel(classifier, vectorizer, texts, labels) {
 }
 
 /**
- * Main training function
+ * Main training function with batch processing
  */
 async function train() {
-   console.log('=== Language Detector Training ===\n');
+   console.log('=== Language Detector Training (Batch Mode) ===\n');
+   console.log(`Configuration:`);
+   console.log(`  Languages: ${CONFIG.languages.join(', ')}`);
+   console.log(`  Max samples per language: ${CONFIG.maxSamplesPerLanguage}`);
+   console.log(`  Batch size: ${CONFIG.batchSize}`);
+   console.log(`  Max features: ${CONFIG.vectorizerOptions.maxFeatures}`);
+   console.log(
+      `  Test split: ${CONFIG.testSplit * 100}%`,
+      `  N-gram range: ${CONFIG.vectorizerOptions.minN}-${CONFIG.vectorizerOptions.maxN}\n`,
+   );
 
-   // Load data
-   console.log('Loading training data...');
-   const dataByLanguage = loadTrainingData();
+   // Phase 1: Collect texts for vocabulary building
+   console.log('Phase 1: Building vocabulary...');
+   const { vocabularyTexts, testData } = collectTextsForVocabulary();
 
-   // Check if we have enough data
-   const totalSamples = Object.values(dataByLanguage).reduce((sum, arr) => sum + arr.length, 0);
-   if (totalSamples === 0) {
+   if (vocabularyTexts.length === 0) {
       console.error('\nNo training data found!');
       console.log('Run: npm run prepare-data');
       throw new Error('No training data found. Run: npm run prepare-data');
    }
 
-   // Prepare datasets
-   console.log('\nPreparing datasets...');
-   const { trainTexts, trainLabels, testTexts, testLabels } = prepareDatasets(dataByLanguage);
-
-   // Train vectorizer
-   console.log('\nTraining TF-IDF vectorizer...');
+   // Train vectorizer on collected texts
+   console.log('\nFitting TF-IDF vectorizer...');
    const vectorizer = new TfidfVectorizer(CONFIG.vectorizerOptions);
-   const trainVectors = vectorizer.fitTransform(trainTexts);
+   vectorizer.fit(vocabularyTexts);
 
-   // Train classifier
-   console.log('\nTraining Naive Bayes classifier...');
-   const classifier = new NaiveBayesClassifier();
-   classifier.fit(trainVectors, trainLabels);
+   // Free vocabulary texts memory
+   vocabularyTexts.length = 0;
+   if (global.gc) {
+      global.gc();
+   }
 
-   // Evaluate
-   console.log('\nEvaluating model...');
-   const metrics = evaluateModel(classifier, vectorizer, testTexts, testLabels);
+   // Phase 2: Train classifier in batches
+   console.log('\nPhase 2: Training classifier...');
+   const { classifier, totalSamples } = trainInBatches(vectorizer);
+
+   // Phase 3: Evaluate
+   console.log('\nPhase 3: Evaluating model...');
+   const metrics = evaluateModel(classifier, vectorizer, testData.texts, testData.labels);
 
    console.log(`\nAccuracy: ${(metrics.accuracy * 100).toFixed(2)}%`);
    console.log('\nPer-class metrics:');
@@ -228,8 +330,8 @@ async function train() {
          perClassMetrics: metrics.perClassMetrics,
       },
       trainedAt: new Date().toISOString(),
-      trainingSamples: trainTexts.length,
-      testSamples: testTexts.length,
+      trainingSamples: totalSamples,
+      testSamples: testData.texts.length,
    };
 
    const modelPath = path.join(MODELS_DIR, 'language-model.json');

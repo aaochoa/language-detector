@@ -15,7 +15,7 @@
       "coverage": "nyc --reporter=lcov --reporter=text npm run test",
       "lint": "./node_modules/.bin/eslint ./src --ext .ts",
       "lint:fix": "./node_modules/.bin/eslint ./src --ext .ts --fix",
-      "train": "node scripts/train.js",
+      "train": "node --max-old-space-size=2048 --expose-gc scripts/train.js",
       "download-data": "node scripts/download-data.js",
       "prepare-data": "node scripts/prepare-data.js",
       "evaluate": "node scripts/evaluate.js",
