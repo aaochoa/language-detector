@@ -522,7 +522,6 @@ const SPANISH_SLANG = new Set([
    'ayr',
    'ayerr', // ayer
    'hoy',
-   'oi',
    'oyy', // hoy
    'smpre',
    'siempre',
@@ -704,9 +703,7 @@ const SPANISH_SLANG = new Set([
    'wao',
    'guau',
    'waooo', // wow
-   'omg',
-   'dios mio',
-   'omggg', // oh my god
+   'dios mio', // oh my god
    'qtf', // what the f*** (Spanish variant)
    'jaja',
    'jajaja',
@@ -1102,6 +1099,60 @@ const SPANISH_SLANG = new Set([
    'esta es informacion', // this is information
    'esta es informacion importante', // this is important information
    'informacion importante', // important information
+   'quisiera agendar una reunion para la proxima semana', // full phrase
+   'quisiera agendar una reunion', // I would like to schedule a meeting
+   'quisiera agendar', // I would like to schedule
+   'quisiera', // I would like (Spanish specific)
+   'una reunion', // a meeting (Spanish - uses 'una')
+   'para la proxima semana', // for next week
+   'para la proxima', // for the next (Spanish - uses 'la')
+   'la proxima semana', // next week (Spanish - uses 'la')
+   'proxima semana', // next week
+   'para nada', // not at all
+   'la app no carga', // the app doesn't load
+   'no carga', // doesn't load
+   'ahi nos vidrios', // slang goodbye
+   'que chaval mas majo', // what a nice guy (Spain)
+   'mas majo', // nice (Spain)
+   'majo', // nice (Spain)
+   'que alegria verte de nuevo', // how happy to see you again
+   'verte de nuevo', // to see you again
+   'de nuevo', // again
+   'que alegria verte', // how happy to see you
+   'te extraño amor', // I miss you love
+   'te extraño', // I miss you
+   'mesa para dos por favor', // table for two please (Spanish - uses 'dos')
+   'mesa para dos', // table for two (Spanish - uses 'dos')
+   'para dos', // for two (Spanish - uses 'dos')
+   'dos', // two (Spanish - distinct from Portuguese 'dois')
+   'que coraje me da', // it makes me angry
+   'que coraje', // how angry
+   'coraje', // anger
+   'como hago para devolver esto', // how do I return this
+   'como hago para', // how do I
+   'devolver esto', // return this
+   'jamas', // never
+   'jamás', // never
+   'la bateria esta baja', // the battery is low (Spanish - uses 'la')
+   'la bateria', // the battery (Spanish - uses 'la')
+   'bateria esta baja', // battery is low
+   'esta baja', // is low
+   'baja', // low (Spanish - Portuguese uses 'baixa')
+   'que antojo de pizza', // I'm craving pizza
+   'que antojo', // what a craving
+   'antojo', // craving
+   'que golazo metio', // what a great goal
+   'que golazo', // what a goal
+   'golazo', // great goal
+   'que bonito dia', // what a nice day
+   'bonito dia', // nice day
+   'me lo llevo', // I'll take it
+   'me siento super bien', // I feel super good
+   'me siento super', // I feel super
+   'cuando llega mi orden', // when does my order arrive
+   'mi orden', // my order
+   'que alivio', // what a relief (Spanish)
+   'q alivio', // what a relief (abbreviated)
 
    // === Regional - Spanish (Spain) ===
    'tio',
@@ -1714,7 +1765,6 @@ const SPANISH_SLANG = new Set([
    'eso es fake',
    'hermano',
    'wtf hermano',
-   'omg',
    'selfie',
    'hashtag',
    'trending',
@@ -1739,11 +1789,6 @@ const SPANISH_SLANG = new Set([
    'please',
    // Note: 'thanks', 'nice', 'ok' removed - primarily English words
    'okey',
-
-   // === Emotions & Reactions ===
-   'alivio',
-   'que alivio',
-   'q alivio',
 
    // === Money & Work ===
    'pagaron',
@@ -1849,6 +1894,17 @@ const ENGLISH_SLANG = new Set([
    'appreciate it',
    'see ya later',
    'see ya soon',
+   'i need to talk to you about something really important',
+   'something really important',
+   'who is going to take the kids to school',
+   'take the kids to school',
+   'the kids to school',
+   'i need to speak to an agent',
+   'speak to an agent',
+   'i need to rest',
+   'need to rest',
+   'hahaha good one',
+   'good one',
    'bro',
    'broo',
    'brooo',
@@ -3318,7 +3374,6 @@ const FRENCH_SLANG = new Set([
    'merde',
    'ptn',
    'putain',
-   'omg',
    'oh mon dieu',
 
    // === Time expressions ===
@@ -3766,14 +3821,17 @@ const PORTUGUESE_SLANG = new Set([
    'eai',
    'e ai',
    'e aí',
+   'e ai mano',
    'fala',
    'falaa',
    'falaaa',
    'salve',
    'salvee',
    'bom dia',
+   'bom dia amigo',
    'boa tarde',
    'boa noite',
+   'boa noite ate amanha',
    'tchau',
    'tchauu',
    'tchauuu',
@@ -3785,6 +3843,9 @@ const PORTUGUESE_SLANG = new Set([
    'falouu',
    'ate mais',
    'ate logo',
+   'ate logo a gente se ve',
+   'a gente se ve',
+   'a gente se fala',
    'ate amanha',
    'abraco',
    'abracos',
@@ -3793,6 +3854,106 @@ const PORTUGUESE_SLANG = new Set([
    'bjs',
    'bjss',
    'bjao',
+   'oi pessoal',
+
+   // === Portuguese-specific phrases (disambiguation) ===
+   'vamos comer alguma coisa',
+   'alguma coisa',
+   'te espero na entrada',
+   'na entrada',
+   'minha irma',
+   'minha irma vem',
+   'vem nos visitar',
+   'proximo fim de semana',
+   'a que horas voce sai',
+   'voce sai do trabalho',
+   'quanto custa a passagem',
+   'passagem de aviao',
+   'como eu posso chegar',
+   'na sua casa',
+   'tb vou',
+   'dps a gente se fala',
+   'blz vamos',
+   'que maravilha',
+   'que surpresa',
+   'que raiva',
+   'que alivio',
+   'preciso falar com um atendente',
+   'um atendente',
+   'tenho um problema com meu pedido',
+   'meu pedido',
+   'quero cancelar minha assinatura',
+   'minha assinatura',
+   'meu pacote nao chegou',
+   'meu pacote',
+   'nao chegou',
+   'quero um reembolso',
+   'reembolso',
+   'quando meu pedido chega',
+   'pedido chega',
+   'o produto chegou danificado',
+   'chegou danificado',
+   'tudo bem pode ser',
+   'pode ser',
+   'ok sem problema',
+   'sem problema',
+   'fechado',
+   'de jeito nenhum',
+   'jeito nenhum',
+   'nem pensar',
+   'nunca na vida',
+   'de forma alguma',
+   'forma alguma',
+   'esta frio la fora',
+   'la fora',
+   'que dia lindo',
+   'dia lindo',
+   'tenho uma reuniao ao meio dia',
+   'ao meio dia',
+   'o prazo e sexta feira',
+   'sexta feira',
+   'terminei o projeto',
+   'o projeto',
+   'amanha preciso trabalhar',
+   'preciso trabalhar',
+   'as aulas comecam',
+   'comecam as oito',
+   'uma mesa para dois por favor',
+   'para dois', // Portuguese - uses 'dois' not 'dos'
+   'dois', // two (Portuguese)
+   'a conta por favor',
+   'estava delicioso obrigado',
+   'delicioso obrigado',
+   'o que voce quer comer',
+   'quer comer',
+   'vamos pedir uma pizza',
+   'pedir uma pizza',
+   'quero um cafe',
+   'um cafe',
+   'quero um sorvete',
+   'um sorvete',
+   'onde fica o aeroporto',
+   'fica o aeroporto',
+   'preciso reservar um hotel',
+   'reservar um hotel',
+   'como eu chego no centro',
+   'chego no centro',
+   'a que horas sai o trem',
+   'sai o trem',
+   'perdi meu voo',
+   'meu voo',
+   'te espero na entrada', // I wait for you at the entrance (Portuguese - uses 'na')
+   'te espero na', // I wait for you at (Portuguese - uses 'na')
+   'te espero', // I wait for you
+   'espero na entrada', // wait at the entrance
+   'espero na', // wait at (Portuguese - uses 'na')
+   'espero', // I wait (also in Portuguese)
+   'na entrada', // at the entrance (Portuguese - uses 'na')
+   'ufa que alivio', // phew what a relief (Portuguese specific - uses 'ufa')
+   'ufa', // phew (Portuguese specific)
+   'nunca na vida', // never in life (Portuguese - uses 'na')
+   'na vida', // in life (Portuguese - uses 'na')
+   'na', // Portuguese contraction (em + a)
 
    // === Common abbreviations ===
    'vc',
