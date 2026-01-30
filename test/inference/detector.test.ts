@@ -111,6 +111,72 @@ describe('LanguageDetector', () => {
          const result = detector.detect('hello how are you friend');
          expect(result.language).to.equal('en');
       });
+
+      it('should detect French slang', () => {
+         const result = detector.detect('mdr ptdr');
+         expect(result.language).to.equal('fr');
+      });
+
+      it('should detect Italian slang', () => {
+         const result = detector.detect('cmq tvb');
+         expect(result.language).to.equal('it');
+      });
+
+      it('should detect Portuguese slang', () => {
+         const result = detector.detect('blz vlw tmj');
+         expect(result.language).to.equal('pt');
+      });
+
+      it('should detect German slang', () => {
+         const result = detector.detect('digga krass');
+         expect(result.language).to.equal('de');
+      });
+
+      it('should handle whitespace-only text', () => {
+         const result = detector.detect('   \t\n  ');
+         expect(result.confidence).to.equal(0);
+         expect(result.isReliable).to.be.false;
+      });
+
+      it('should include source in result', () => {
+         const result = detector.detect('hola como estas amigo');
+         expect(result).to.have.property('source');
+      });
+
+      it('should detect Mexican Spanish slang', () => {
+         const result = detector.detect('que onda wey');
+         expect(result.language).to.equal('es');
+      });
+
+      it('should detect Argentine Spanish slang', () => {
+         const result = detector.detect('che boludo');
+         expect(result.language).to.equal('es');
+      });
+
+      it('should detect Austrian German slang', () => {
+         const result = detector.detect('oida leiwand');
+         expect(result.language).to.equal('de');
+      });
+
+      it('should detect Swiss German slang', () => {
+         const result = detector.detect('grüezi merci vielmal');
+         expect(result.language).to.equal('de');
+      });
+
+      it('should detect Brazilian Portuguese slang', () => {
+         const result = detector.detect('kkk mano bora');
+         expect(result.language).to.equal('pt');
+      });
+
+      it('should handle text with emojis', () => {
+         const result = detector.detect('hola amigo 😀👍');
+         expect(result.language).to.equal('es');
+      });
+
+      it('should handle text with URLs', () => {
+         const result = detector.detect('check this out https://example.com please');
+         expect(result).to.have.property('language');
+      });
    });
 
    describe('detectBatch', () => {
