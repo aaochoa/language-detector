@@ -1768,6 +1768,16 @@ const SPANISH_SLANG = new Set([
    'qhaces',
    'kehaces', // what are you doing
 
+   // === Disambiguation (Spanish-specific phrases) ===
+   'que emocion',
+   'te cuidas',
+   'cuida te',
+   'cuidate',
+   'eso es fake bro',
+   'vamos a comer tacos',
+   'comer tacos',
+   'tacos',
+
    // === Spanglish (English words in Spanish context) ===
    'like',
    'ponle like',

@@ -44,6 +44,14 @@
  */
 
 const ENGLISH_SLANG = new Set([
+   // === Disambiguation (English-specific phrases) ===
+   'lets get some tacos',
+   'family reunion on sunday',
+   'family reunion',
+   'on sunday',
+   'lets get some',
+   'get some tacos',
+
    // === Greetings & Farewells ===
    'hello',
    'hellooo',
