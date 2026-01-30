@@ -18,6 +18,11 @@
  */
 
 const FRENCH_SLANG = new Set([
+   // === Disambiguation (French-specific phrases) ===
+   'ou est laeroport',
+   'ou est l aeroport',
+   'laeroport',
+
    // === Greetings & Farewells ===
    'salut',
    'salut ca va', // hi how are you

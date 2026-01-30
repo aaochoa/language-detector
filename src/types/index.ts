@@ -5,7 +5,7 @@
 /**
  * Supported language codes
  */
-export type LanguageCode = 'es' | 'en' | 'fr' | 'it' | 'pt';
+export type LanguageCode = 'es' | 'en' | 'fr' | 'it' | 'pt' | 'de';
 
 /**
  * Detection result source

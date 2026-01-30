@@ -24,6 +24,7 @@ const DATASETS = {
          fr: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/fr.txt.gz',
          it: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/it.txt.gz',
          pt: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/pt.txt.gz',
+         de: 'https://object.pouta.csc.fi/OPUS-OpenSubtitles/v2018/mono/de.txt.gz',
       },
    },
 
@@ -37,6 +38,7 @@ const DATASETS = {
          fr: 'https://downloads.tatoeba.org/exports/per_language/fra/fra_sentences.tsv.bz2',
          it: 'https://downloads.tatoeba.org/exports/per_language/ita/ita_sentences.tsv.bz2',
          pt: 'https://downloads.tatoeba.org/exports/per_language/por/por_sentences.tsv.bz2',
+         de: 'https://downloads.tatoeba.org/exports/per_language/deu/deu_sentences.tsv.bz2',
       },
    },
 
@@ -60,6 +62,7 @@ const DATASETS = {
          fr: 'https://downloads.wortschatz-leipzig.de/corpora/fra_news_2020_30K.tar.gz',
          it: 'https://downloads.wortschatz-leipzig.de/corpora/ita_news_2020_30K.tar.gz',
          pt: 'https://downloads.wortschatz-leipzig.de/corpora/por_news_2020_30K.tar.gz',
+         de: 'https://downloads.wortschatz-leipzig.de/corpora/deu_news_2020_30K.tar.gz',
       },
    },
 
@@ -73,6 +76,7 @@ const DATASETS = {
          fr: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/fr.txt.gz',
          it: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/it.txt.gz',
          pt: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/pt.txt.gz',
+         de: 'https://object.pouta.csc.fi/OPUS-TED2020/v1/mono/de.txt.gz',
       },
    },
 
@@ -87,6 +91,7 @@ const DATASETS = {
          fr: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/fr.txt.gz',
          it: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/it.txt.gz',
          pt: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/pt.txt.gz',
+         de: 'https://object.pouta.csc.fi/OPUS-QED/v2.0a/mono/de.txt.gz',
       },
    },
 
@@ -100,6 +105,7 @@ const DATASETS = {
          fr: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/fr.txt.gz',
          it: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/it.txt.gz',
          pt: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/pt.txt.gz',
+         de: 'https://object.pouta.csc.fi/OPUS-Ubuntu/v14.10/mono/de.txt.gz',
       },
    },
 };

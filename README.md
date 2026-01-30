@@ -9,21 +9,22 @@ A **Naive Bayes language detector** optimized for short, informal text like SMS 
 
 ## Supported Languages
 
-| Code | Language   | Flag | Slang Terms | Regional Support                                                                                          |
-| ---- | ---------- | ---- | ----------- | --------------------------------------------------------------------------------------------------------- |
-| `en` | English    | 🇺🇸🇬🇧 | ~1,300+     | US, UK, Gen-Z, Gaming, [AAVE](https://en.wikipedia.org/wiki/African-American_Vernacular_English), texting |
-| `es` | Spanish    | 🇪🇸🇲🇽 | ~1,800+     | Mexico, Spain, Argentina, Colombia, Venezuela, Chile, Caribbean                                           |
-| `fr` | French     | 🇫🇷   | ~300+       | Standard French, SMS abbreviations (mdr, ptdr, slt, tkt)                                                  |
-| `it` | Italian    | 🇮🇹   | ~350+       | Standard Italian, regional variants (cmq, tvb, xke)                                                       |
-| `pt` | Portuguese | 🇧🇷🇵🇹 | ~500+       | Brazilian (pt-BR) & European (pt-PT) Portuguese                                                           |
+| Code | Language   | Flag   | Slang Terms | Regional Support                                                                                          |
+| ---- | ---------- | ------ | ----------- | --------------------------------------------------------------------------------------------------------- |
+| `en` | English    | 🇺🇸🇬🇧   | ~1,300+     | US, UK, Gen-Z, Gaming, [AAVE](https://en.wikipedia.org/wiki/African-American_Vernacular_English), texting |
+| `es` | Spanish    | 🇪🇸🇲🇽   | ~1,800+     | Mexico, Spain, Argentina, Colombia, Venezuela, Chile, Caribbean                                           |
+| `fr` | French     | 🇫🇷     | ~300+       | Standard French, SMS abbreviations (mdr, ptdr, slt, tkt)                                                  |
+| `it` | Italian    | 🇮🇹     | ~350+       | Standard Italian, regional variants (cmq, tvb, xke)                                                       |
+| `pt` | Portuguese | 🇧🇷🇵🇹   | ~500+       | Brazilian (pt-BR) & European (pt-PT) Portuguese                                                           |
+| `de` | German     | 🇩🇪🇦🇹🇨🇭 | ~400+       | Standard German, Austrian, Swiss German, youth slang (Jugendsprache)                                      |
 
-**Total: ~4,200+ slang terms** across all languages for improved informal text detection.
+**Total: ~4,600+ slang terms** across all languages for improved informal text detection.
 
 ## Features
 
 - ✅ **Optimized for short text**: Works well with SMS and chat messages (1-50 words)
 - ✅ **Handles informal language**: Supports slang, abbreviations, and texting patterns
-- ✅ **Multi-language support**: 5 languages with regional variations
+- ✅ **Multi-language support**: 6 languages with regional variations
 - ✅ **Fast inference**: <5ms per detection, suitable for real-time applications
 - ✅ **TypeScript support**: Full type definitions included
 - ✅ **Slang dictionary fallback**: Comprehensive detection for ambiguous cases
@@ -52,7 +53,7 @@ console.log(result);
 //   language: 'es',
 //   confidence: 0.95,
 //   isReliable: true,
-//   probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.01 },
+//   probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.005, de: 0.005 },
 //   source: 'ml'
 // }
 
@@ -76,7 +77,7 @@ Detect the language of a single text.
 
 ```typescript
 interface DetectionResult {
-   language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt')
+   language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt', 'de')
    confidence: number; // Confidence score (0-1)
    isReliable: boolean; // True if confidence > 0.7
    probabilities?: Record<string, number>; // Probability per language
@@ -148,6 +149,7 @@ For short/ambiguous texts, the detector uses comprehensive slang dictionaries:
 | French     | mdr, ptdr, slt, tkt, jsp, bcp, cv               |
 | Italian    | cmq, tvb, xke, nn, qlc, grz                     |
 | Portuguese | kkk, blz, vlw, tmj, mano, bora, fixe            |
+| German     | digga, krass, geil, oida, leiwand, hdl, vllt    |
 
 ## Training Your Own Model
 
@@ -233,7 +235,7 @@ language-detector/
 
 ```typescript
 import type {
-   LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt'
+   LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de'
    DetectionResult,
    DetectionSource,
    SlangDetectionResult,
@@ -324,4 +326,4 @@ Contributions are welcome! Please ensure:
 
 ---
 
-**Made with ❤️ for the messaging community**
+Made with ❤️ for the messaging community

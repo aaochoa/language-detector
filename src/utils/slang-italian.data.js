@@ -247,7 +247,6 @@ const ITALIAN_SLANG = new Set([
    'ahahahah',
    'haha',
    'hahaha',
-   'lol',
    'ahahahahah',
 
    // === Time expressions ===

@@ -12,7 +12,7 @@ const zlib = require('zlib');
 const { execSync } = require('child_process');
 
 const CONFIG = {
-   languages: ['es', 'en', 'fr', 'it', 'pt'],
+   languages: ['es', 'en', 'fr', 'it', 'pt', 'de'],
    maxSamplesPerLanguage: 500000, // Use up to 500k samples per language
    minTextLength: 5,
    maxTextLength: 500,
@@ -505,6 +505,28 @@ function getSampleData() {
          'o que voce vai fazer hoje a noite',
          'te amo muito',
          'isso e muito legal',
+      ],
+      de: [
+         'hallo wie geht es dir',
+         'guten morgen mein freund',
+         'vielen dank für alles',
+         'ich bin sehr müde',
+         'wo bist du jetzt',
+         'wann kommst du an',
+         'warum antwortest du nicht',
+         'lass uns etwas essen gehen',
+         'ich warte am eingang auf dich',
+         'ich verstehe nicht was du sagst',
+         'kannst du das bitte wiederholen',
+         'morgen muss ich arbeiten',
+         'am wochenende gehen wir ins kino',
+         'ich brauche hilfe damit',
+         'kannst du mir die informationen schicken',
+         'bis später wir sehen uns',
+         'einen schönen tag noch mein freund',
+         'was machst du heute abend',
+         'ich liebe dich sehr',
+         'das ist echt cool',
       ],
    };
 }

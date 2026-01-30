@@ -21,6 +21,7 @@ const slangData = require('./slang-dictionaries.data') as {
    FRENCH_SLANG: Set<string>;
    ITALIAN_SLANG: Set<string>;
    PORTUGUESE_SLANG: Set<string>;
+   GERMAN_SLANG: Set<string>;
    SLANG_WORDS: SlangDictionary;
 };
 
@@ -48,6 +49,11 @@ export const ITALIAN_SLANG: Set<string> = slangData.ITALIAN_SLANG;
  * Portuguese texting slang and informal abbreviations
  */
 export const PORTUGUESE_SLANG: Set<string> = slangData.PORTUGUESE_SLANG;
+
+/**
+ * German texting slang and informal abbreviations
+ */
+export const GERMAN_SLANG: Set<string> = slangData.GERMAN_SLANG;
 
 /**
  * Combined slang dictionaries export

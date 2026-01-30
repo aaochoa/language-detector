@@ -16,7 +16,7 @@ const { TfidfVectorizer, NaiveBayesClassifier, normalizeText, augmentText } = re
 
 // Configuration
 const CONFIG = {
-   languages: ['es', 'en', 'fr', 'it', 'pt'],
+   languages: ['es', 'en', 'fr', 'it', 'pt', 'de'],
    testSplit: 0.2,
    maxSamplesPerLanguage: 15000, // Can use more samples with batch processing
    batchSize: 2000, // Process this many samples at a time

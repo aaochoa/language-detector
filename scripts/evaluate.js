@@ -1266,6 +1266,158 @@ const TEST_CASES = [
    { text: 'bue bom', expected: 'pt' },
    { text: 'tas bem', expected: 'pt' },
    { text: 'porreiro', expected: 'pt' },
+
+   // ==========================================
+   // GERMAN - Basic conversational
+   // ==========================================
+   { text: 'hallo wie geht es dir', expected: 'de' },
+   { text: 'guten morgen mein freund', expected: 'de' },
+   { text: 'vielen dank für alles', expected: 'de' },
+   { text: 'wie war dein tag heute', expected: 'de' },
+   { text: 'bis morgen dann', expected: 'de' },
+   { text: 'das gefällt mir sehr', expected: 'de' },
+   { text: 'wo bist du gerade', expected: 'de' },
+   { text: 'warum bist du nicht gekommen', expected: 'de' },
+   { text: 'lass uns etwas essen gehen', expected: 'de' },
+   { text: 'ich warte am eingang auf dich', expected: 'de' },
+
+   // GERMAN - Longer sentences
+   { text: 'gestern war ich im supermarkt und habe viel eingekauft', expected: 'de' },
+   { text: 'ich kann nicht glauben dass es schon freitag ist', expected: 'de' },
+   { text: 'meine schwester kommt uns nächstes wochenende besuchen', expected: 'de' },
+   { text: 'ich muss mit dir über etwas wichtiges sprechen', expected: 'de' },
+   { text: 'das wetter ist heute sehr kalt bleib lieber zu hause', expected: 'de' },
+
+   // GERMAN - Questions
+   { text: 'um wieviel uhr gehst du von der arbeit', expected: 'de' },
+   { text: 'wieviel kostet das flugticket', expected: 'de' },
+   { text: 'wer bringt die kinder zur schule', expected: 'de' },
+   { text: 'wann hast du zuletzt mit ihr gesprochen', expected: 'de' },
+   { text: 'wie komme ich zu deinem haus', expected: 'de' },
+
+   // GERMAN - Informal/Slang (Youth)
+   { text: 'digga was geht', expected: 'de' },
+   { text: 'alter das ist krass', expected: 'de' },
+   { text: 'ey das ist mega geil', expected: 'de' },
+   { text: 'boah echt jetzt', expected: 'de' },
+   { text: 'läuft bei dir', expected: 'de' },
+   { text: 'kein bock heute', expected: 'de' },
+   { text: 'chill mal', expected: 'de' },
+   { text: 'das ist so cringe', expected: 'de' },
+   { text: 'safe alter', expected: 'de' },
+   { text: 'lost wie du bist', expected: 'de' },
+   { text: 'das ist lit', expected: 'de' },
+   { text: 'ehrenmann', expected: 'de' },
+   { text: 'sheesh das war gut', expected: 'de' },
+
+   // GERMAN - Texting abbreviations
+   { text: 'hdl', expected: 'de' },
+   { text: 'hdgdl', expected: 'de' },
+   { text: 'lg', expected: 'de' },
+   { text: 'vllt morgen', expected: 'de' },
+   { text: 'ka was los ist', expected: 'de' },
+   { text: 'kp', expected: 'de' },
+   { text: 'kb', expected: 'de' },
+   { text: 'eigtl schon', expected: 'de' },
+   { text: 'evtl komme ich', expected: 'de' },
+   { text: 'gn8', expected: 'de' },
+
+   // GERMAN - Austrian slang
+   { text: 'servas wie gehts', expected: 'de' },
+   { text: 'grüß gott', expected: 'de' },
+   { text: 'das ist leiwand', expected: 'de' },
+   { text: 'oida bist du deppat', expected: 'de' },
+   { text: 'passt scho', expected: 'de' },
+   { text: 'na geh', expected: 'de' },
+   { text: 'jo eh', expected: 'de' },
+   { text: 'is ma wurscht', expected: 'de' },
+   { text: 'hawara was machst', expected: 'de' },
+   { text: 'pfiat di', expected: 'de' },
+
+   // GERMAN - Swiss slang
+   { text: 'grüezi mitenand', expected: 'de' },
+   { text: 'sali zäme', expected: 'de' },
+   { text: 'merci vielmal', expected: 'de' },
+   { text: 'uf widerluege', expected: 'de' },
+   { text: 'das isch huere geil', expected: 'de' },
+   { text: 'chömmer go', expected: 'de' },
+   { text: 'gömmer go esse', expected: 'de' },
+   { text: 'lueg mal da', expected: 'de' },
+
+   // GERMAN - Common expressions
+   { text: 'alles klar', expected: 'de' },
+   { text: 'auf jeden fall', expected: 'de' },
+   { text: 'keine ahnung', expected: 'de' },
+   { text: 'kein problem', expected: 'de' },
+   { text: 'egal', expected: 'de' },
+   { text: 'ist mir egal', expected: 'de' },
+   { text: 'genau so', expected: 'de' },
+   { text: 'stimmt', expected: 'de' },
+   { text: 'richtig', expected: 'de' },
+   { text: 'natürlich', expected: 'de' },
+
+   // GERMAN - Exclamations
+   { text: 'mist', expected: 'de' },
+   { text: 'verdammt', expected: 'de' },
+   { text: 'mensch', expected: 'de' },
+   { text: 'der hammer', expected: 'de' },
+   { text: 'wahnsinn', expected: 'de' },
+   { text: 'gott sei dank', expected: 'de' },
+   { text: 'zum glück', expected: 'de' },
+   { text: 'endlich', expected: 'de' },
+
+   // GERMAN - Weather
+   { text: 'es regnet heute sehr stark', expected: 'de' },
+   { text: 'es ist sehr heiß', expected: 'de' },
+   { text: 'es ist kalt draußen', expected: 'de' },
+   { text: 'es schneit', expected: 'de' },
+   { text: 'was für ein schöner tag', expected: 'de' },
+
+   // GERMAN - Work/School
+   { text: 'ich habe um zwölf uhr ein meeting', expected: 'de' },
+   { text: 'die deadline ist freitag', expected: 'de' },
+   { text: 'ich habe das projekt fertig', expected: 'de' },
+   { text: 'morgen muss ich arbeiten', expected: 'de' },
+   { text: 'der unterricht beginnt um acht', expected: 'de' },
+
+   // GERMAN - Food/Restaurant
+   { text: 'einen tisch für zwei bitte', expected: 'de' },
+   { text: 'die rechnung bitte', expected: 'de' },
+   { text: 'es war sehr lecker danke', expected: 'de' },
+   { text: 'was möchtest du essen', expected: 'de' },
+   { text: 'lass uns eine pizza bestellen', expected: 'de' },
+   { text: 'ich möchte einen kaffee', expected: 'de' },
+
+   // GERMAN - Travel
+   { text: 'wo ist der flughafen', expected: 'de' },
+   { text: 'ich muss ein hotel buchen', expected: 'de' },
+   { text: 'wie komme ich ins stadtzentrum', expected: 'de' },
+   { text: 'wann fährt der zug ab', expected: 'de' },
+   { text: 'ich habe meinen flug verpasst', expected: 'de' },
+
+   // GERMAN - Very short
+   { text: 'ja genau', expected: 'de' },
+   { text: 'nein', expected: 'de' },
+   { text: 'danke', expected: 'de' },
+   { text: 'bitte', expected: 'de' },
+   { text: 'tschüss', expected: 'de' },
+   { text: 'moin', expected: 'de' },
+   { text: 'servus', expected: 'de' },
+   { text: 'prost', expected: 'de' },
+   { text: 'mahlzeit', expected: 'de' },
+   { text: 'gesundheit', expected: 'de' },
+
+   // GERMAN - Greetings/Farewells
+   { text: 'guten abend zusammen', expected: 'de' },
+   { text: 'gute nacht schlaf gut', expected: 'de' },
+   { text: 'bis später dann', expected: 'de' },
+   { text: 'machs gut', expected: 'de' },
+   { text: 'schönes wochenende', expected: 'de' },
+   { text: 'schönen feierabend', expected: 'de' },
+   { text: 'alles gute zum geburtstag', expected: 'de' },
+   { text: 'herzlichen glückwunsch', expected: 'de' },
+   { text: 'viel erfolg', expected: 'de' },
+   { text: 'gute besserung', expected: 'de' },
 ];
 
 /**
