@@ -1115,6 +1115,157 @@ const TEST_CASES = [
    { text: 'tvb', expected: 'it' },
    { text: 'cmq', expected: 'it' },
    { text: 'vabbe', expected: 'it' },
+
+   // ==========================================
+   // PORTUGUESE - Basic conversational
+   // ==========================================
+   { text: 'oi tudo bem', expected: 'pt' },
+   { text: 'bom dia amigo', expected: 'pt' },
+   { text: 'muito obrigado por tudo', expected: 'pt' },
+   { text: 'como voce esta', expected: 'pt' },
+   { text: 'ate logo a gente se ve', expected: 'pt' },
+   { text: 'estou muito cansado', expected: 'pt' },
+   { text: 'onde voce esta agora', expected: 'pt' },
+   { text: 'porque voce nao responde', expected: 'pt' },
+   { text: 'vamos comer alguma coisa', expected: 'pt' },
+   { text: 'te espero na entrada', expected: 'pt' },
+
+   // PORTUGUESE - Longer sentences
+   { text: 'ontem fui ao supermercado e comprei muitas coisas para o jantar', expected: 'pt' },
+   { text: 'nao acredito que ja e sexta feira a semana passou muito rapido', expected: 'pt' },
+   { text: 'minha irma vem nos visitar no proximo fim de semana', expected: 'pt' },
+   { text: 'preciso falar com voce sobre algo muito importante', expected: 'pt' },
+   { text: 'esta muito frio hoje e melhor ficar em casa', expected: 'pt' },
+
+   // PORTUGUESE - Questions
+   { text: 'a que horas voce sai do trabalho', expected: 'pt' },
+   { text: 'quanto custa a passagem de aviao', expected: 'pt' },
+   { text: 'quem vai levar as criancas para a escola', expected: 'pt' },
+   { text: 'quando foi a ultima vez que voce falou com ela', expected: 'pt' },
+   { text: 'como eu posso chegar na sua casa', expected: 'pt' },
+
+   // PORTUGUESE - Informal/Slang (Brazilian)
+   { text: 'e ai mano', expected: 'pt' },
+   { text: 'beleza parceiro', expected: 'pt' },
+   { text: 'nossa que massa', expected: 'pt' },
+   { text: 'caraca que legal', expected: 'pt' },
+   { text: 'bora la', expected: 'pt' },
+   { text: 'valeu demais', expected: 'pt' },
+   { text: 'tranquilo cara', expected: 'pt' },
+   { text: 'show de bola', expected: 'pt' },
+   { text: 'maneiro demais', expected: 'pt' },
+   { text: 'ta ligado', expected: 'pt' },
+   { text: 'firmeza', expected: 'pt' },
+   { text: 'sei la', expected: 'pt' },
+
+   // PORTUGUESE - Texting abbreviations
+   { text: 'vc ta onde', expected: 'pt' },
+   { text: 'tb vou', expected: 'pt' },
+   { text: 'pq vc nao veio', expected: 'pt' },
+   { text: 'vlw pela ajuda', expected: 'pt' },
+   { text: 'td bem obg', expected: 'pt' },
+   { text: 'hj nao posso', expected: 'pt' },
+   { text: 'dps a gente se fala', expected: 'pt' },
+   { text: 'blz vamos', expected: 'pt' },
+
+   // PORTUGUESE - Emotions/Reactions
+   { text: 'estou muito feliz', expected: 'pt' },
+   { text: 'que maravilha', expected: 'pt' },
+   { text: 'que surpresa', expected: 'pt' },
+   { text: 'estou muito triste', expected: 'pt' },
+   { text: 'que raiva', expected: 'pt' },
+   { text: 'que medo', expected: 'pt' },
+   { text: 'ufa que alivio', expected: 'pt' },
+   { text: 'nao acredito', expected: 'pt' },
+
+   // PORTUGUESE - Customer service
+   { text: 'preciso falar com um atendente', expected: 'pt' },
+   { text: 'tenho um problema com meu pedido', expected: 'pt' },
+   { text: 'quero cancelar minha assinatura', expected: 'pt' },
+   { text: 'meu pacote nao chegou', expected: 'pt' },
+   { text: 'quero um reembolso', expected: 'pt' },
+   { text: 'quando meu pedido chega', expected: 'pt' },
+   { text: 'o produto chegou danificado', expected: 'pt' },
+   { text: 'como faco para devolver este produto', expected: 'pt' },
+
+   // PORTUGUESE - Casual greetings
+   { text: 'oi pessoal', expected: 'pt' },
+   { text: 'boa noite', expected: 'pt' },
+   { text: 'boa noite ate amanha', expected: 'pt' },
+   { text: 'tchau beijos', expected: 'pt' },
+   { text: 'a gente se fala', expected: 'pt' },
+   { text: 'abracos', expected: 'pt' },
+
+   // PORTUGUESE - Confirmations/Agreements
+   { text: 'tudo bem pode ser', expected: 'pt' },
+   { text: 'sim claro', expected: 'pt' },
+   { text: 'ok sem problema', expected: 'pt' },
+   { text: 'com certeza', expected: 'pt' },
+   { text: 'pode crer', expected: 'pt' },
+   { text: 'fechado', expected: 'pt' },
+
+   // PORTUGUESE - Denials/Disagreements
+   { text: 'nao obrigado', expected: 'pt' },
+   { text: 'de jeito nenhum', expected: 'pt' },
+   { text: 'nem pensar', expected: 'pt' },
+   { text: 'nunca na vida', expected: 'pt' },
+   { text: 'de forma alguma', expected: 'pt' },
+
+   // PORTUGUESE - Weather
+   { text: 'esta chovendo muito hoje', expected: 'pt' },
+   { text: 'esta muito quente', expected: 'pt' },
+   { text: 'esta frio la fora', expected: 'pt' },
+   { text: 'esta nevando', expected: 'pt' },
+   { text: 'que dia lindo', expected: 'pt' },
+
+   // PORTUGUESE - Work/School
+   { text: 'tenho uma reuniao ao meio dia', expected: 'pt' },
+   { text: 'o prazo e sexta feira', expected: 'pt' },
+   { text: 'terminei o projeto', expected: 'pt' },
+   { text: 'amanha preciso trabalhar', expected: 'pt' },
+   { text: 'as aulas comecam as oito', expected: 'pt' },
+
+   // PORTUGUESE - Food/Restaurant
+   { text: 'uma mesa para dois por favor', expected: 'pt' },
+   { text: 'a conta por favor', expected: 'pt' },
+   { text: 'estava delicioso obrigado', expected: 'pt' },
+   { text: 'o que voce quer comer', expected: 'pt' },
+   { text: 'vamos pedir uma pizza', expected: 'pt' },
+   { text: 'quero um cafe', expected: 'pt' },
+   { text: 'quero um sorvete', expected: 'pt' },
+
+   // PORTUGUESE - Travel
+   { text: 'onde fica o aeroporto', expected: 'pt' },
+   { text: 'preciso reservar um hotel', expected: 'pt' },
+   { text: 'como eu chego no centro', expected: 'pt' },
+   { text: 'a que horas sai o trem', expected: 'pt' },
+   { text: 'perdi meu voo', expected: 'pt' },
+
+   // PORTUGUESE - Very short (Brazilian)
+   { text: 'oi', expected: 'pt' },
+   { text: 'obrigado', expected: 'pt' },
+   { text: 'obrigada', expected: 'pt' },
+   { text: 'desculpa', expected: 'pt' },
+   { text: 'beleza', expected: 'pt' },
+   { text: 'legal', expected: 'pt' },
+   { text: 'massa', expected: 'pt' },
+   { text: 'valeu', expected: 'pt' },
+   { text: 'tchau', expected: 'pt' },
+   { text: 'vlw', expected: 'pt' },
+   { text: 'blz', expected: 'pt' },
+   { text: 'tmj', expected: 'pt' },
+
+   // PORTUGUESE - Laughing
+   { text: 'kkk muito bom', expected: 'pt' },
+   { text: 'kkkkkk', expected: 'pt' },
+   { text: 'rsrsrs', expected: 'pt' },
+
+   // PORTUGUESE - European Portuguese
+   { text: 'esta fixe', expected: 'pt' },
+   { text: 'que giro', expected: 'pt' },
+   { text: 'bue bom', expected: 'pt' },
+   { text: 'tas bem', expected: 'pt' },
+   { text: 'porreiro', expected: 'pt' },
 ];
 
 /**
