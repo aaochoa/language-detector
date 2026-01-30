@@ -121,5 +121,30 @@ export function augmentText(text: string, lang: string): string[] {
       }
    }
 
+   if (lang === 'pt') {
+      const abbreviated = text
+         .replace(/\bvoce\b/gi, 'vc')
+         .replace(/\bvocê\b/gi, 'vc')
+         .replace(/\btambem\b/gi, 'tb')
+         .replace(/\btambém\b/gi, 'tb')
+         .replace(/\bporque\b/gi, 'pq')
+         .replace(/\bquando\b/gi, 'qnd')
+         .replace(/\bquanto\b/gi, 'qnt')
+         .replace(/\bmuito\b/gi, 'mt')
+         .replace(/\bnada\b/gi, 'nd')
+         .replace(/\btudo\b/gi, 'td')
+         .replace(/\bagora\b/gi, 'agr')
+         .replace(/\bhoje\b/gi, 'hj')
+         .replace(/\bdepois\b/gi, 'dps')
+         .replace(/\bbeleza\b/gi, 'blz')
+         .replace(/\bvaleu\b/gi, 'vlw')
+         .replace(/\bobrigado\b/gi, 'obg')
+         .replace(/\bobrigada\b/gi, 'obg');
+
+      if (abbreviated !== text) {
+         variations.push(abbreviated);
+      }
+   }
+
    return variations;
 }
