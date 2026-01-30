@@ -1,21 +1,22 @@
 # Language Detector
 
-A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Supports English, Spanish, French, and Italian with high accuracy on informal text.
+A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Supports English, Spanish, French, Italian, and Portuguese with high accuracy on informal text.
 
 ## Supported Languages
 
-| Code | Language | Slang Support                                                              |
-| ---- | -------- | -------------------------------------------------------------------------- |
-| `en` | English  | US, UK, Gen-Z, Gaming, AAVE, texting abbreviations                         |
-| `es` | Spanish  | Mexico, Spain, Argentina, Colombia, Venezuela, Chile, Caribbean            |
-| `fr` | French   | Standard French, SMS/texting abbreviations (mdr, ptdr, slt, tkt)           |
-| `it` | Italian  | Standard Italian, regional variants, texting abbreviations (cmq, tvb, xke) |
+| Code | Language   | Slang Support                                                              |
+| ---- | ---------- | -------------------------------------------------------------------------- |
+| `en` | English    | US, UK, Gen-Z, Gaming, AAVE, texting abbreviations                         |
+| `es` | Spanish    | Mexico, Spain, Argentina, Colombia, Venezuela, Chile, Caribbean            |
+| `fr` | French     | Standard French, SMS/texting abbreviations (mdr, ptdr, slt, tkt)           |
+| `it` | Italian    | Standard Italian, regional variants, texting abbreviations (cmq, tvb, xke) |
+| `pt` | Portuguese | Brazilian & European Portuguese, texting abbreviations (vc, tb, blz, vlw)  |
 
 ## Features
 
 - ✅ **Optimized for short text**: Works well with SMS and chat messages
 - ✅ **Handles informal language**: Supports slang, abbreviations, and texting patterns
-- ✅ **Multi-language support**: English, Spanish, French, and Italian
+- ✅ **Multi-language support**: English, Spanish, French, Italian, and Portuguese
 - ✅ **Fast inference**: Lightweight model suitable for real-time applications
 - ✅ **TypeScript support**: Full TypeScript type definitions included
 - ✅ **Slang dictionary fallback**: Comprehensive slang detection for ambiguous cases
@@ -43,12 +44,12 @@ console.log(result);
 //   language: 'es',
 //   confidence: 0.95,
 //   isReliable: true,
-//   probabilities: { es: 0.95, en: 0.02, fr: 0.02, it: 0.01 },
+//   probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.01 },
 //   source: 'ml'
 // }
 
 // Batch detection
-const results = detector.detectBatch(['hello', 'hola', 'bonjour', 'ciao', 'buenos dias']);
+const results = detector.detectBatch(['hello', 'hola', 'bonjour', 'ciao', 'oi', 'buenos dias']);
 ```
 
 ## API Reference

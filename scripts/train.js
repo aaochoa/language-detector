@@ -11,9 +11,9 @@ const { TfidfVectorizer, NaiveBayesClassifier, normalizeText, augmentText } = re
 
 // Configuration
 const CONFIG = {
-   languages: ['es', 'en', 'fr', 'it'],
+   languages: ['es', 'en', 'fr', 'it', 'pt'],
    testSplit: 0.2,
-   maxSamplesPerLanguage: 15000, // 15k per language = 60k total, fits in ~2GB RAM
+   maxSamplesPerLanguage: 12000, // 12k per language = 60k total, fits in ~2GB RAM
    vectorizerOptions: {
       minN: 2,
       maxN: 4, // 4-gram for better accuracy
