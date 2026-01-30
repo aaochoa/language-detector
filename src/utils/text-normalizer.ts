@@ -146,5 +146,31 @@ export function augmentText(text: string, lang: string): string[] {
       }
    }
 
+   if (lang === 'de') {
+      const abbreviated = text
+         .replace(/\bliebe grüße\b/gi, 'lg')
+         .replace(/\bliebe gruesse\b/gi, 'lg')
+         .replace(/\bhab dich lieb\b/gi, 'hdl')
+         .replace(/\bhab dich ganz doll lieb\b/gi, 'hdgdl')
+         .replace(/\bgute nacht\b/gi, 'gn8')
+         .replace(/\bvielleicht\b/gi, 'vllt')
+         .replace(/\beventuell\b/gi, 'evtl')
+         .replace(/\beigentlich\b/gi, 'eigtl')
+         .replace(/\birgendwie\b/gi, 'iwie')
+         .replace(/\birgendwann\b/gi, 'iwann')
+         .replace(/\birgendwo\b/gi, 'iwo')
+         .replace(/\birgendwas\b/gi, 'iwas')
+         .replace(/\bkeine ahnung\b/gi, 'ka')
+         .replace(/\bkein plan\b/gi, 'kp')
+         .replace(/\bkein bock\b/gi, 'kb')
+         .replace(/\bdanke\b/gi, 'thx')
+         .replace(/\bübrigens\b/gi, 'btw')
+         .replace(/\bauf jeden fall\b/gi, 'auf jeden');
+
+      if (abbreviated !== text) {
+         variations.push(abbreviated);
+      }
+   }
+
    return variations;
 }
