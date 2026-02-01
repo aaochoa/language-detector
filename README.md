@@ -25,6 +25,7 @@ A **Naive Bayes language detector** optimized for short, informal text like SMS 
 - ✅ **Optimized for short text**: Works well with SMS and chat messages (1-50 words)
 - ✅ **Handles informal language**: Supports slang, abbreviations, and texting patterns
 - ✅ **Multi-language support**: 6 languages with regional variations
+- ✅ **Language filtering**: Restrict detection to specific languages with "neither" detection
 - ✅ **Fast inference**: <5ms per detection, suitable for real-time applications
 - ✅ **TypeScript support**: Full type definitions included
 - ✅ **Slang dictionary fallback**: Comprehensive detection for ambiguous cases
@@ -88,6 +89,61 @@ interface DetectionResult {
 ### `LanguageDetector.detectBatch(texts: string[]): DetectionResult[]`
 
 Detect languages for multiple texts efficiently.
+
+### `LanguageDetector.setAllowedLanguages(languages, options?): this`
+
+Restrict detection to specific languages only. Useful when you only care about certain languages.
+
+```typescript
+// Only detect English or Spanish
+detector.setAllowedLanguages(['en', 'es']);
+
+// With fast mode for better performance (skips "neither" detection)
+detector.setAllowedLanguages(['en', 'es'], { fastMode: true });
+```
+
+**Options:**
+
+| Option     | Type      | Default | Description                                                                                        |
+| ---------- | --------- | ------- | -------------------------------------------------------------------------------------------------- |
+| `fastMode` | `boolean` | `false` | When `true`, only computes probabilities for allowed languages (faster but no "neither" detection) |
+
+**Behavior:**
+
+| Scenario | `fastMode: false` (default) | `fastMode: true` |
+| -------- | --------------------------- | ---------------- |
+| Text matches allowed language | High confidence, `isReliable: true` | High confidence, `isReliable: true` |
+| Text doesn't match allowed languages | Low confidence, `isReliable: false` | High confidence (re-normalized) |
+
+```typescript
+detector.setAllowedLanguages(['en', 'es']);
+
+// Spanish text - detected correctly
+detector.detect('Hola amigo');
+// { language: 'es', confidence: 0.95, isReliable: true }
+
+// French text with en/es filter - "neither" case
+detector.detect('Bonjour!');
+// { language: 'en', confidence: 0.12, isReliable: false }
+// Low confidence indicates text doesn't really match allowed languages
+```
+
+### `LanguageDetector.clearAllowedLanguages(): this`
+
+Remove language restrictions and detect all supported languages again.
+
+```typescript
+detector.clearAllowedLanguages();
+// Now detects all 6 languages
+```
+
+### `LanguageDetector.allowedLanguages: string[] | null`
+
+Get the currently allowed languages. Returns `null` if all languages are allowed.
+
+### `LanguageDetector.fastMode: boolean`
+
+Get whether fast mode is enabled.
 
 ### `resetDetector(): void`
 
@@ -244,6 +300,7 @@ import type {
    VectorizerData,
    ClassifierData,
    ModelData,
+   AllowedLanguagesOptions, // Options for setAllowedLanguages()
 } from 'naive-bayes-language-detector';
 ```
 
