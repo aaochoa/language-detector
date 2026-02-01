@@ -14,7 +14,12 @@
  */
 
 // Main exports
-export { LanguageDetector, getDetector, resetDetector } from './inference/detector';
+export {
+   LanguageDetector,
+   getDetector,
+   resetDetector,
+   type AllowedLanguagesOptions,
+} from './inference/detector';
 
 // For training
 export { TfidfVectorizer } from './inference/tfidf-vectorizer';
