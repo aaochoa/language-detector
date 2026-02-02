@@ -87,6 +87,22 @@ function findBestLabel(logProbs: Record<string, number>): string {
 }
 
 /**
+ * Filter log probabilities to only include allowed classes
+ */
+function filterLogProbs(
+   logProbs: Record<string, number>,
+   allowedClasses: string[],
+): Record<string, number> {
+   const filtered: Record<string, number> = {};
+   allowedClasses.forEach((cls) => {
+      if (cls in logProbs) {
+         filtered[cls] = logProbs[cls];
+      }
+   });
+   return filtered;
+}
+
+/**
  * Convert log probabilities to normalized probabilities
  */
 function normalizeProbabilities(logProbs: Record<string, number>): Record<string, number> {
@@ -102,6 +118,27 @@ function normalizeProbabilities(logProbs: Record<string, number>): Record<string
    return Object.fromEntries(
       Object.entries(expProbs).map(([label, prob]) => [label, prob / sumExpProbs]),
    );
+}
+
+/**
+ * Create a fallback prediction result when no valid classes found
+ */
+function createFallbackResult(fallbackLabel: string): PredictionResult {
+   return { label: fallbackLabel, confidence: 0, probabilities: {} };
+}
+
+/**
+ * Create prediction result from log probabilities
+ */
+function createPredictionFromLogProbs(
+   logProbs: Record<string, number>,
+   confidenceOverride?: number,
+): PredictionResult {
+   const bestLabel = findBestLabel(logProbs);
+   const probabilities = normalizeProbabilities(logProbs);
+   const confidence = confidenceOverride ?? probabilities[bestLabel];
+
+   return { label: bestLabel, confidence, probabilities };
 }
 
 export class NaiveBayesClassifier {
@@ -143,28 +180,99 @@ export class NaiveBayesClassifier {
 
    /**
     * Predict class for a single vector
+    * @param vector - Feature vector to classify
+    * @param allowedClasses - Optional list of classes to consider (filters output)
+    * @param fastMode - When true, only computes probabilities for allowed classes (faster but no "neither" detection)
     */
-   predict(vector: number[]): PredictionResult {
+   predict(vector: number[], allowedClasses?: string[], fastMode = false): PredictionResult {
       if (!this._fitted) {
          throw new Error('Classifier must be fitted before predict');
       }
 
-      const logProbs = this._computeAllLogProbs(vector);
-      const bestLabel = findBestLabel(logProbs);
-      const probabilities = normalizeProbabilities(logProbs);
+      const hasFilter = allowedClasses && allowedClasses.length > 0;
 
-      return {
-         label: bestLabel,
-         confidence: probabilities[bestLabel],
-         probabilities,
-      };
+      // Fast mode: only compute probabilities for allowed classes
+      if (fastMode && hasFilter) {
+         return this._predictFiltered(vector, allowedClasses);
+      }
+
+      // Compute all probabilities
+      const allLogProbs = this._computeAllLogProbs(vector);
+
+      // No filtering: return normal prediction
+      if (!hasFilter) {
+         return createPredictionFromLogProbs(allLogProbs);
+      }
+
+      // Filter and check for "neither" case
+      return NaiveBayesClassifier._predictWithNeitherDetection(allLogProbs, allowedClasses);
+   }
+
+   /**
+    * Predict with only allowed classes (fast mode)
+    */
+   private _predictFiltered(vector: number[], allowedClasses: string[]): PredictionResult {
+      const logProbs = this._computeLogProbsForClasses(vector, allowedClasses);
+
+      if (Object.keys(logProbs).length === 0) {
+         return createFallbackResult(allowedClasses[0]);
+      }
+
+      return createPredictionFromLogProbs(logProbs);
+   }
+
+   /**
+    * Predict with "neither" detection - uses all probabilities to detect non-matching text
+    */
+   private static _predictWithNeitherDetection(
+      allLogProbs: Record<string, number>,
+      allowedClasses: string[],
+   ): PredictionResult {
+      const allProbabilities = normalizeProbabilities(allLogProbs);
+      const overallBestLabel = findBestLabel(allLogProbs);
+      const filteredLogProbs = filterLogProbs(allLogProbs, allowedClasses);
+
+      if (Object.keys(filteredLogProbs).length === 0) {
+         return createFallbackResult(allowedClasses[0]);
+      }
+
+      const bestLabel = findBestLabel(filteredLogProbs);
+      const filteredProbabilities = normalizeProbabilities(filteredLogProbs);
+
+      // Use original probability if best match is outside allowed (indicates "neither")
+      const isOutsideAllowed = !allowedClasses.includes(overallBestLabel);
+      const confidence = isOutsideAllowed
+         ? allProbabilities[bestLabel]
+         : filteredProbabilities[bestLabel];
+
+      return { label: bestLabel, confidence, probabilities: filteredProbabilities };
+   }
+
+   /**
+    * Compute log probabilities for specific classes only
+    */
+   private _computeLogProbsForClasses(vector: number[], classes: string[]): Record<string, number> {
+      const logProbs: Record<string, number> = {};
+      classes.forEach((label) => {
+         if (label in this._classPriors) {
+            logProbs[label] = this._computeLogProb(vector, label);
+         }
+      });
+      return logProbs;
    }
 
    /**
     * Predict classes for multiple vectors
+    * @param vectors - Feature vectors to classify
+    * @param allowedClasses - Optional list of classes to consider (filters output)
+    * @param fastMode - When true, only computes probabilities for allowed classes
     */
-   predictBatch(vectors: number[][]): PredictionResult[] {
-      return vectors.map((v) => this.predict(v));
+   predictBatch(
+      vectors: number[][],
+      allowedClasses?: string[],
+      fastMode = false,
+   ): PredictionResult[] {
+      return vectors.map((v) => this.predict(v, allowedClasses, fastMode));
    }
 
    /**

@@ -104,6 +104,105 @@ describe('NaiveBayesClassifier', () => {
          expect(results[0]).to.have.property('label');
          expect(results[1]).to.have.property('label');
       });
+
+      it('should respect allowedClasses parameter', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         const results = classifier.predictBatch(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+            ],
+            ['a', 'b'],
+         );
+
+         expect(results).to.have.lengthOf(2);
+         results.forEach((result) => {
+            expect(result.label).to.be.oneOf(['a', 'b']);
+         });
+      });
+   });
+
+   describe('predict with allowedClasses', () => {
+      it('should only return labels from allowed classes', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         // Vector most similar to 'c', but 'c' is not allowed
+         const result = classifier.predict([0, 0, 1], ['a', 'b']);
+
+         expect(result.label).to.be.oneOf(['a', 'b']);
+      });
+
+      it('should re-normalize probabilities among allowed classes', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         const result = classifier.predict([1, 0, 0], ['a', 'b']);
+
+         // Probabilities should only contain allowed classes
+         expect(Object.keys(result.probabilities)).to.have.members(['a', 'b']);
+         expect(result.probabilities).to.not.have.property('c');
+
+         // Probabilities should sum to 1
+         const sum = Object.values(result.probabilities).reduce((a, b) => a + b, 0);
+         expect(sum).to.be.closeTo(1, 0.01);
+      });
+
+      it('should return zero confidence when no allowed classes are in model', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0],
+               [0, 1],
+            ],
+            ['a', 'b'],
+         );
+
+         const result = classifier.predict([1, 0], ['x', 'y']);
+
+         expect(result.confidence).to.equal(0);
+         expect(result.label).to.equal('x');
+      });
+
+      it('should work normally without allowedClasses parameter', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         const result = classifier.predict([0, 0, 1]);
+
+         expect(result.label).to.equal('c');
+         expect(Object.keys(result.probabilities)).to.have.members(['a', 'b', 'c']);
+      });
    });
 
    describe('serialization', () => {
@@ -157,6 +256,79 @@ describe('NaiveBayesClassifier', () => {
          const restoredPred = restored.predict([1, 0]);
 
          expect(restoredPred.label).to.equal(originalPred.label);
+      });
+   });
+
+   describe('predict with fastMode', () => {
+      it('should only include allowed classes in probabilities', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         const result = classifier.predict([1, 0, 0], ['a', 'b'], true);
+
+         expect(Object.keys(result.probabilities)).to.have.members(['a', 'b']);
+         expect(result.probabilities).to.not.have.property('c');
+      });
+
+      it('should return same label as non-fast mode for matching text', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         // Vector matching 'a' which is in allowed list
+         const fastResult = classifier.predict([1, 0, 0], ['a', 'b'], true);
+         const normalResult = classifier.predict([1, 0, 0], ['a', 'b'], false);
+
+         expect(fastResult.label).to.equal(normalResult.label);
+         expect(fastResult.label).to.equal('a');
+      });
+
+      it('should have higher confidence in fast mode for non-matching vectors', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0, 0],
+               [0, 1, 0],
+               [0, 0, 1],
+            ],
+            ['a', 'b', 'c'],
+         );
+
+         // Vector matching 'c' but only 'a', 'b' allowed
+         const fastResult = classifier.predict([0, 0, 1], ['a', 'b'], true);
+         const normalResult = classifier.predict([0, 0, 1], ['a', 'b'], false);
+
+         // Fast mode re-normalizes, so confidence will be higher
+         expect(fastResult.confidence).to.be.greaterThan(normalResult.confidence);
+      });
+
+      it('should handle empty allowed classes match gracefully', () => {
+         const classifier = new NaiveBayesClassifier();
+         classifier.fit(
+            [
+               [1, 0],
+               [0, 1],
+            ],
+            ['a', 'b'],
+         );
+
+         const result = classifier.predict([1, 0], ['x', 'y'], true);
+
+         expect(result.confidence).to.equal(0);
+         expect(result.label).to.equal('x');
       });
    });
 });
