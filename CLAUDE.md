@@ -26,7 +26,7 @@ npm run train                # Train all three sizes
 npm run train:small          # Train small model only
 npm run train:medium         # Train medium model only
 npm run train:large          # Train large model only
-npm run evaluate             # Evaluate large model against 959 test cases
+npm run evaluate             # Evaluate large model against 1079 test cases
 npm run evaluate -- --size small    # Evaluate a specific size; add -i for interactive mode
 ```
 
@@ -40,7 +40,7 @@ Three size variants are trained with different accuracy/speed trade-offs:
 | medium | 3,000       | 10,000     | 2–5          | `language-model-medium.min.json` |
 | large  | 5,000       | 15,000     | 2–5          | `language-model-large.min.json`  |
 
-Models are saved as minified JSON only. The `build` script copies all `*.min.json` files from `models/` into `dist/models/`. Load a specific size by passing the appropriate path to `getDetector()`.
+Models are saved as minified JSON only. The `build` script copies all `*.min.json` files from `models/` into `dist/models/`. Load a specific size with `getDetector('small' | 'medium' | 'large')`.
 
 The `size` field is stored in the saved model JSON and typed as `ModelSize = 'small' | 'medium' | 'large'` in `src/types/index.ts`.
 
@@ -48,7 +48,7 @@ The `size` field is stored in the saved model JSON and typed as `ModelSize = 'sm
 
 Detection uses a two-signal pipeline: **ML** (TF-IDF + Gaussian Naive Bayes) and **slang dictionary lookup**. Which signal wins depends on text length and confidence thresholds defined as constants at the top of `src/inference/detector.ts`.
 
-```
+```text
 Input → TextNormalizer → TfidfVectorizer → NaiveBayesClassifier ─┐
                                                                    ├─ merge → DetectionResult
 Input → SlangDictionaries (Set<string> per language) ─────────────┘
@@ -69,19 +69,19 @@ Input → SlangDictionaries (Set<string> per language) ────────�
 
 **Key source files:**
 
-| File | Role |
-|------|------|
-| `src/inference/detector.ts` | `LanguageDetector` class + singleton `getDetector()` |
-| `src/inference/tfidf-vectorizer.ts` | Character n-gram TF-IDF; feature count determined by model size |
-| `src/inference/naive-bayes.ts` | Gaussian Naive Bayes classifier with `predict(vector, allowedLanguages?, fastMode?)` |
-| `src/utils/slang-dictionaries.ts` | Aggregates per-language `Set<string>` from `*.data.js` files |
-| `src/utils/slang-*.data.js` | Raw slang/abbreviation word lists per language (~4,600+ total terms) |
-| `src/utils/text-normalizer.ts` | `normalizeText` (strips URLs, emails, phone numbers, lowercases) + `augmentText` for training |
-| `src/utils/ngram-extractor.ts` | `extractNgrams`, `countNgrams`, `getTermFrequencies` |
-| `src/types/index.ts` | All shared TypeScript interfaces and types including `ModelSize` |
-| `scripts/train.js` | Batch training; `SIZE_CONFIGS` at the top defines all size parameters |
+| File                                | Role                                                                                          |
+| ----------------------------------- | --------------------------------------------------------------------------------------------- |
+| `src/inference/detector.ts`         | `LanguageDetector` class + singleton `getDetector()`                                          |
+| `src/inference/tfidf-vectorizer.ts` | Character n-gram TF-IDF; feature count determined by model size                               |
+| `src/inference/naive-bayes.ts`      | Gaussian Naive Bayes classifier with `predict(vector, allowedLanguages?, fastMode?)`          |
+| `src/utils/slang-dictionaries.ts`   | Aggregates per-language `Set<string>` from `*.data.js` files                                  |
+| `src/utils/slang-*.data.js`         | Raw slang/abbreviation word lists per language (~4,600+ total terms)                          |
+| `src/utils/text-normalizer.ts`      | `normalizeText` (strips URLs, emails, phone numbers, lowercases) + `augmentText` for training |
+| `src/utils/ngram-extractor.ts`      | `extractNgrams`, `countNgrams`, `getTermFrequencies`                                          |
+| `src/types/index.ts`                | All shared TypeScript interfaces and types including `ModelSize`                              |
+| `scripts/train.js`                  | Batch training; `SIZE_CONFIGS` at the top defines all size parameters                         |
 
-**Singleton pattern:** `getDetector(modelPath)` returns a cached `LanguageDetector` instance. Call `resetDetector()` between tests to avoid state leakage.
+**Singleton pattern:** `getDetector(size?)` returns a cached `LanguageDetector` instance per size. Call `resetDetector()` between tests to avoid state leakage.
 
 **`allowedLanguages` / `fastMode`:** When `setAllowedLanguages(['en', 'es'])` is called, `fastMode: false` (default) still runs all languages so "neither" detection works via low confidence. `fastMode: true` normalizes only over allowed languages — faster but no "neither" detection.
 
