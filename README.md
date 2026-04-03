@@ -1,4 +1,4 @@
-# Language Detector
+# Gaussian Naive Bayes - Language Detector
 
 [![npm version](https://img.shields.io/npm/v/naive-bayes-language-detector.svg)](https://www.npmjs.com/package/naive-bayes-language-detector)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
@@ -44,7 +44,7 @@ import { getDetector } from 'naive-bayes-language-detector';
 
 // Load the pre-trained model
 const detector = getDetector(
-   './node_modules/naive-bayes-language-detector/dist/models/language-model.json',
+    './node_modules/naive-bayes-language-detector/dist/models/language-model.json',
 );
 
 // Detect language
@@ -78,11 +78,11 @@ Detect the language of a single text.
 
 ```typescript
 interface DetectionResult {
-   language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt', 'de')
-   confidence: number; // Confidence score (0-1)
-   isReliable: boolean; // True if confidence > 0.7
-   probabilities?: Record<string, number>; // Probability per language
-   source?: 'ml' | 'slang' | 'slang-override' | 'combined';
+    language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt', 'de')
+    confidence: number; // Confidence score (0-1)
+    isReliable: boolean; // True if confidence > 0.7
+    probabilities?: Record<string, number>; // Probability per language
+    source?: 'ml' | 'slang' | 'slang-override' | 'combined';
 }
 ```
 
@@ -110,10 +110,10 @@ detector.setAllowedLanguages(['en', 'es'], { fastMode: true });
 
 **Behavior:**
 
-| Scenario | `fastMode: false` (default) | `fastMode: true` |
-| -------- | --------------------------- | ---------------- |
-| Text matches allowed language | High confidence, `isReliable: true` | High confidence, `isReliable: true` |
-| Text doesn't match allowed languages | Low confidence, `isReliable: false` | High confidence (re-normalized) |
+| Scenario                             | `fastMode: false` (default)         | `fastMode: true`                    |
+| ------------------------------------ | ----------------------------------- | ----------------------------------- |
+| Text matches allowed language        | High confidence, `isReliable: true` | High confidence, `isReliable: true` |
+| Text doesn't match allowed languages | Low confidence, `isReliable: false` | High confidence (re-normalized)     |
 
 ```typescript
 detector.setAllowedLanguages(['en', 'es']);
@@ -173,9 +173,9 @@ Converts text to numerical vectors using character [n-grams](https://en.wikipedi
 import { TfidfVectorizer } from 'naive-bayes-language-detector';
 
 const vectorizer = new TfidfVectorizer({
-   minN: 2, // Minimum n-gram size
-   maxN: 5, // Maximum n-gram size
-   maxFeatures: 5000, // Vocabulary limit
+    minN: 2, // Minimum n-gram size
+    maxN: 5, // Maximum n-gram size
+    maxFeatures: 5000, // Vocabulary limit
 });
 
 vectorizer.fit(trainingTexts);
@@ -291,16 +291,16 @@ language-detector/
 
 ```typescript
 import type {
-   LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de'
-   DetectionResult,
-   DetectionSource,
-   SlangDetectionResult,
-   PredictionResult,
-   VectorizerOptions,
-   VectorizerData,
-   ClassifierData,
-   ModelData,
-   AllowedLanguagesOptions, // Options for setAllowedLanguages()
+    LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de'
+    DetectionResult,
+    DetectionSource,
+    SlangDetectionResult,
+    PredictionResult,
+    VectorizerOptions,
+    VectorizerData,
+    ClassifierData,
+    ModelData,
+    AllowedLanguagesOptions, // Options for setAllowedLanguages()
 } from 'naive-bayes-language-detector';
 ```
 

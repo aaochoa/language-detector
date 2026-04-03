@@ -34,20 +34,20 @@ const GERMAN_SLANG = unwrapDefault(require('./slang-german.data'));
  * Combined slang dictionaries export
  */
 const SLANG_WORDS = {
-   es: SPANISH_SLANG,
-   en: ENGLISH_SLANG,
-   fr: FRENCH_SLANG,
-   it: ITALIAN_SLANG,
-   pt: PORTUGUESE_SLANG,
-   de: GERMAN_SLANG,
+    es: SPANISH_SLANG,
+    en: ENGLISH_SLANG,
+    fr: FRENCH_SLANG,
+    it: ITALIAN_SLANG,
+    pt: PORTUGUESE_SLANG,
+    de: GERMAN_SLANG,
 };
 
 module.exports = {
-   SLANG_WORDS,
-   SPANISH_SLANG,
-   ENGLISH_SLANG,
-   FRENCH_SLANG,
-   ITALIAN_SLANG,
-   PORTUGUESE_SLANG,
-   GERMAN_SLANG,
+    SLANG_WORDS,
+    SPANISH_SLANG,
+    ENGLISH_SLANG,
+    FRENCH_SLANG,
+    ITALIAN_SLANG,
+    PORTUGUESE_SLANG,
+    GERMAN_SLANG,
 };
