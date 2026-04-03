@@ -51,11 +51,11 @@ const detector = getDetector(
 const result = detector.detect('Hola, ¿cómo estás?');
 console.log(result);
 // {
-//   language: 'es',
-//   confidence: 0.95,
-//   isReliable: true,
-//   probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.005, de: 0.005 },
-//   source: 'ml'
+//     language: 'es',
+//     confidence: 0.95,
+//     isReliable: true,
+//     probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.005, de: 0.005 },
+//     source: 'ml'
 // }
 
 // Batch detection
