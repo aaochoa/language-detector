@@ -10,7 +10,24 @@ const path = require('path');
 const readline = require('readline');
 const { getDetector, resetDetector } = require('../dist');
 
-const MODEL_PATH = path.join(__dirname, '../models/language-model.json');
+const VALID_SIZES = ['small', 'medium', 'large'];
+
+function parseSizeArg() {
+    const sizeIdx = process.argv.indexOf('--size');
+    if (sizeIdx !== -1) {
+        const size = process.argv[sizeIdx + 1];
+        if (!VALID_SIZES.includes(size)) {
+            console.error(`Unknown size "${size}". Valid options: ${VALID_SIZES.join(', ')}`);
+            // eslint-disable-next-line no-process-exit
+            process.exit(1);
+        }
+        return size;
+    }
+    return 'large';
+}
+
+const MODEL_SIZE = parseSizeArg();
+const MODEL_PATH = path.join(__dirname, `../models/language-model-${MODEL_SIZE}.min.json`);
 
 // Test cases
 const TEST_CASES = [
@@ -1453,7 +1470,7 @@ function runInteractiveMode(detector) {
  * Run evaluation
  */
 function evaluate() {
-    console.log('=== Language Detector Evaluation ===\n');
+    console.log(`=== Language Detector Evaluation (${MODEL_SIZE}) ===\n`);
 
     // Reset and load detector
     resetDetector();
@@ -1463,8 +1480,8 @@ function evaluate() {
         detector = getDetector(MODEL_PATH);
     } catch (error) {
         console.error('Failed to load model:', error.message);
-        console.log('\nRun: npm run train');
-        throw new Error('Model not found. Run: npm run train');
+        console.log(`\nRun: npm run train:${MODEL_SIZE}`);
+        throw new Error(`Model not found. Run: npm run train:${MODEL_SIZE}`);
     }
 
     console.log(`Supported languages: ${detector.supportedLanguages.join(', ')}\n`);

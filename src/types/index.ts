@@ -85,11 +85,17 @@ export interface ClassifierData {
 }
 
 /**
+ * Model size variants
+ */
+export type ModelSize = 'small' | 'medium' | 'large';
+
+/**
  * Complete model data for serialization
  */
 export interface ModelData {
     vectorizer: VectorizerData;
     classifier: ClassifierData;
+    size?: ModelSize;
     config?: Record<string, unknown>;
 }
 
