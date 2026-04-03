@@ -1128,6 +1128,9 @@ const SPANISH_SLANG = new Set([
     'mesa para dos', // table for two (Spanish - uses 'dos')
     'para dos', // for two (Spanish - uses 'dos')
     'dos', // two (Spanish - distinct from Portuguese 'dois')
+    'que tristeza me da', // it saddens me (Spanish)
+    'que tristeza', // how sad
+    'tristeza', // sadness (Spanish - Portuguese uses same word but not in PT slang)
     'que coraje me da', // it makes me angry
     'que coraje', // how angry
     'coraje', // anger
@@ -1152,6 +1155,9 @@ const SPANISH_SLANG = new Set([
     'me lo llevo', // I'll take it
     'me siento super bien', // I feel super good
     'me siento super', // I feel super
+    'tengo un problema con mi pedido', // I have a problem with my order
+    'con mi pedido', // with my order
+    'pedido', // order/request (Spanish - distinct context from Portuguese)
     'cuando llega mi orden', // when does my order arrive
     'mi orden', // my order
     'que alivio', // what a relief (Spanish)

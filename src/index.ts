@@ -17,6 +17,7 @@
 export {
     LanguageDetector,
     getDetector,
+    getModelPath,
     resetDetector,
     type AllowedLanguagesOptions,
 } from './inference/detector';
@@ -32,6 +33,7 @@ export { extractNgrams, countNgrams, getTermFrequencies } from './utils/ngram-ex
 // Types
 export type {
     LanguageCode,
+    ModelSize,
     DetectionResult,
     DetectionSource,
     SlangDetectionResult,

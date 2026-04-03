@@ -42,10 +42,11 @@ npm install naive-bayes-language-detector
 ```typescript
 import { getDetector } from 'naive-bayes-language-detector';
 
-// Load the pre-trained model
-const detector = getDetector(
-    './node_modules/naive-bayes-language-detector/dist/models/language-model.json',
-);
+// Load the default (large) model — no path needed
+const detector = getDetector();
+
+// Or choose a specific size: 'small' | 'medium' | 'large'
+const detector = getDetector('small');
 
 // Detect language
 const result = detector.detect('Hola, ¿cómo estás?');
@@ -62,14 +63,46 @@ console.log(result);
 const results = detector.detectBatch(['hello', 'hola', 'bonjour', 'ciao', 'oi']);
 ```
 
-## API Reference
+## Model Sizes
 
-### `getDetector(modelPath: string): LanguageDetector`
+Three pre-trained models are bundled with the package, trading off size and speed against accuracy:
 
-Get or create a singleton detector instance.
+| Size     | Vocabulary | Accuracy           | Model size |
+| -------- | ---------- | ------------------ | ---------- |
+| `small`  | 1,000      | 97.31% (1050/1079) | ~0.4 MB    |
+| `medium` | 3,000      | 99.26% (1071/1079) | ~1.1 MB    |
+| `large`  | 5,000      | 99.81% (1077/1079) | ~1.7 MB    |
 
 ```typescript
-const detector = getDetector('./models/language-model.json');
+import { getDetector, getModelPath } from 'naive-bayes-language-detector';
+
+// Each size is a separate singleton — they can coexist
+const small = getDetector('small');
+const medium = getDetector('medium');
+const large = getDetector('large'); // same as getDetector()
+
+// Resolve a model's file path without loading it
+const p = getModelPath('medium'); // → .../dist/models/language-model-medium.min.json
+```
+
+## API Reference
+
+### `getDetector(size?: ModelSize): LanguageDetector`
+
+Get or create a singleton detector instance for the given model size. Defaults to `'large'`.
+
+```typescript
+const detector = getDetector(); // large (default)
+const detector = getDetector('small'); // small
+const detector = getDetector('medium'); // medium
+```
+
+### `getModelPath(size?: ModelSize): string`
+
+Resolve the absolute path of a bundled model file without loading it.
+
+```typescript
+const p = getModelPath('large'); // → .../dist/models/language-model-large.min.json
 ```
 
 ### `LanguageDetector.detect(text: string): DetectionResult`
@@ -145,9 +178,14 @@ Get the currently allowed languages. Returns `null` if all languages are allowed
 
 Get whether fast mode is enabled.
 
-### `resetDetector(): void`
+### `resetDetector(size?: ModelSize): void`
 
-Reset the singleton instance (useful for testing).
+Reset singleton instances (useful for testing). Pass a size to reset only that instance, or omit to reset all.
+
+```typescript
+resetDetector('small'); // reset only the small instance
+resetDetector(); // reset all instances
+```
 
 ## How It Works
 
@@ -237,24 +275,23 @@ Processes raw data, filters by length, and removes duplicates.
 ### 3. Train Model
 
 ```bash
-npm run train
+npm run train           # train all three sizes
+npm run train:small     # train a specific size
+npm run train:medium
+npm run train:large
 ```
 
-Trains a TF-IDF + Naive Bayes model using batch processing and saves to `models/language-model.json`.
+Trains TF-IDF + Naive Bayes models using batch processing and saves minified files to `models/language-model-{size}.min.json`.
 
 ### 4. Evaluate Model
 
 ```bash
-npm run evaluate
+npm run evaluate                    # evaluates the large model (default)
+npm run evaluate -- --size small    # evaluate a specific size
+npm run evaluate -- --size large -i # interactive mode
 ```
 
-Runs the model against 959 test cases and reports accuracy.
-
-Interactive mode:
-
-```bash
-npm run evaluate -- -i
-```
+Runs the model against 1079 test cases and reports accuracy.
 
 ## Text Normalization
 
@@ -292,6 +329,7 @@ language-detector/
 ```typescript
 import type {
     LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de'
+    ModelSize, // 'small' | 'medium' | 'large'
     DetectionResult,
     DetectionSource,
     SlangDetectionResult,
@@ -326,8 +364,9 @@ npm run lint:fix
 # Training workflow
 npm run download-data
 npm run prepare-data
-npm run train
-npm run evaluate
+npm run train           # all sizes
+npm run train:large     # or a specific size
+npm run evaluate -- --size large
 ```
 
 ## Tech Stack
@@ -358,12 +397,12 @@ npm install
 
 ## Performance
 
-| Metric         | Value                 |
-| -------------- | --------------------- |
-| Inference time | <5ms per text         |
-| Model size     | ~1.7MB (JSON)         |
-| Accuracy       | 100% (959 test cases) |
-| Memory usage   | ~50MB loaded          |
+| Metric         | small         | medium        | large                    |
+| -------------- | ------------- | ------------- | ------------------------ |
+| Inference time | <5ms per text | <5ms per text | <5ms per text            |
+| Model size     | ~0.4 MB       | ~1.1 MB       | ~1.7 MB                  |
+| Accuracy       | 97.31%        | 99.26%        | 99.81% (1079 test cases) |
+| Memory usage   | ~15 MB loaded | ~30 MB loaded | ~50 MB loaded            |
 
 ## License
 

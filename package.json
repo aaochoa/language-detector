@@ -1,6 +1,6 @@
 {
    "name": "naive-bayes-language-detector",
-   "version": "1.3.0",
+   "version": "1.3.1",
    "description": "Naive Bayes - NGram language detector",
    "main": "dist/index.js",
    "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
       "node": ">=20"
    },
    "scripts": {
-      "build": "rm -rf dist && tsc && cp -r models dist/models",
+      "build": "rm -rf dist && tsc && mkdir -p dist/models && cp models/*.min.json dist/models/",
       "build:watch": "rm -rf dist && tsc --watch",
       "build:test": "rm -rf dist && tsc -p tsconfig.test.json",
       "test": "TS_NODE_PROJECT=tsconfig.test.json mocha --require ts-node/register --timeout 30000 --exit './test/**/*.test.ts'",
@@ -16,6 +16,9 @@
       "lint": "./node_modules/.bin/eslint ./src --ext .ts",
       "lint:fix": "./node_modules/.bin/eslint ./src --ext .ts --fix",
       "train": "node --max-old-space-size=2048 --expose-gc scripts/train.js",
+      "train:small": "node --max-old-space-size=2048 --expose-gc scripts/train.js --size small",
+      "train:medium": "node --max-old-space-size=2048 --expose-gc scripts/train.js --size medium",
+      "train:large": "node --max-old-space-size=2048 --expose-gc scripts/train.js --size large",
       "download-data": "node scripts/download-data.js",
       "prepare-data": "node scripts/prepare-data.js",
       "evaluate": "node scripts/evaluate.js",

@@ -4,11 +4,18 @@
  */
 
 import * as fs from 'fs';
+import * as path from 'path';
 import { TfidfVectorizer } from './tfidf-vectorizer';
 import { NaiveBayesClassifier } from './naive-bayes';
 import { normalizeText } from '../utils/text-normalizer';
 import { SLANG_WORDS } from '../utils/slang-dictionaries';
-import type { DetectionResult, SlangDetectionResult, ModelData, PredictionResult } from '../types';
+import type {
+    DetectionResult,
+    SlangDetectionResult,
+    ModelData,
+    ModelSize,
+    PredictionResult,
+} from '../types';
 
 // Constants
 const SHORT_TEXT_THRESHOLD = 15;
@@ -387,23 +394,57 @@ export class LanguageDetector {
     }
 }
 
-// Singleton instance for reuse
-let _detectorInstance: LanguageDetector | null = null;
+// Singleton instance per model size
+const _detectorInstances: Partial<Record<ModelSize, LanguageDetector>> = {};
 
 /**
- * Get or create detector instance
+ * Resolve the bundled model path for a given size.
+ * Works whether running from source (models/) or installed (dist/models/).
  */
-export function getDetector(modelPath: string): LanguageDetector {
-    if (!_detectorInstance) {
-        _detectorInstance = new LanguageDetector();
-        _detectorInstance.loadFromFile(modelPath);
-    }
-    return _detectorInstance;
+export function getModelPath(size: ModelSize = 'large'): string {
+    return path.join(__dirname, '..', 'models', `language-model-${size}.min.json`);
 }
 
 /**
- * Reset singleton instance (for testing)
+ * Get or create a detector instance for the given model size.
+ * Uses the bundled model from the package's own models/ directory.
  */
-export function resetDetector(): void {
-    _detectorInstance = null;
+export function getDetector(size?: ModelSize): LanguageDetector;
+/**
+ * Get or create a detector instance from an explicit file path.
+ * @deprecated Pass a ModelSize instead: getDetector('large')
+ */
+export function getDetector(modelPath: string): LanguageDetector;
+export function getDetector(sizeOrPath: ModelSize | string = 'large'): LanguageDetector {
+    const isSize = sizeOrPath === 'small' || sizeOrPath === 'medium' || sizeOrPath === 'large';
+
+    if (isSize) {
+        const size = sizeOrPath as ModelSize;
+        if (!_detectorInstances[size]) {
+            _detectorInstances[size] = new LanguageDetector();
+            _detectorInstances[size]!.loadFromFile(getModelPath(size));
+        }
+        return _detectorInstances[size]!;
+    }
+
+    // Legacy path-based call: use a shared slot keyed off the path
+    if (!_detectorInstances.large) {
+        _detectorInstances.large = new LanguageDetector();
+        _detectorInstances.large.loadFromFile(sizeOrPath);
+    }
+    return _detectorInstances.large;
+}
+
+/**
+ * Reset singleton instances (useful for testing).
+ * Pass a size to reset only that instance, or omit to reset all.
+ */
+export function resetDetector(size?: ModelSize): void {
+    if (size) {
+        delete _detectorInstances[size];
+    } else {
+        (Object.keys(_detectorInstances) as ModelSize[]).forEach((s) => {
+            delete _detectorInstances[s];
+        });
+    }
 }
