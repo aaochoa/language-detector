@@ -15,10 +15,10 @@
 
 // Main exports
 export {
-   LanguageDetector,
-   getDetector,
-   resetDetector,
-   type AllowedLanguagesOptions,
+    LanguageDetector,
+    getDetector,
+    resetDetector,
+    type AllowedLanguagesOptions,
 } from './inference/detector';
 
 // For training
@@ -31,16 +31,16 @@ export { extractNgrams, countNgrams, getTermFrequencies } from './utils/ngram-ex
 
 // Types
 export type {
-   LanguageCode,
-   DetectionResult,
-   DetectionSource,
-   SlangDetectionResult,
-   PredictionResult,
-   VectorizerOptions,
-   VectorizerData,
-   ClassifierData,
-   ModelData,
-   NgramCounts,
-   TermFrequencies,
-   SlangDictionary,
+    LanguageCode,
+    DetectionResult,
+    DetectionSource,
+    SlangDetectionResult,
+    PredictionResult,
+    VectorizerOptions,
+    VectorizerData,
+    ClassifierData,
+    ModelData,
+    NgramCounts,
+    TermFrequencies,
+    SlangDictionary,
 } from './types';

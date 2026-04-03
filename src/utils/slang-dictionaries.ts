@@ -16,13 +16,13 @@ import type { SlangDictionary } from '../types';
 // Import from the JavaScript file
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const slangData = require('./slang-dictionaries.data') as {
-   SPANISH_SLANG: Set<string>;
-   ENGLISH_SLANG: Set<string>;
-   FRENCH_SLANG: Set<string>;
-   ITALIAN_SLANG: Set<string>;
-   PORTUGUESE_SLANG: Set<string>;
-   GERMAN_SLANG: Set<string>;
-   SLANG_WORDS: SlangDictionary;
+    SPANISH_SLANG: Set<string>;
+    ENGLISH_SLANG: Set<string>;
+    FRENCH_SLANG: Set<string>;
+    ITALIAN_SLANG: Set<string>;
+    PORTUGUESE_SLANG: Set<string>;
+    GERMAN_SLANG: Set<string>;
+    SLANG_WORDS: SlangDictionary;
 };
 
 /**

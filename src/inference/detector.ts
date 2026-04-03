@@ -24,21 +24,21 @@ const ALL_SLANG_LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de'];
  * Check if confidence is above reliable threshold
  */
 function isReliable(confidence: number): boolean {
-   return confidence > RELIABLE_CONFIDENCE_THRESHOLD;
+    return confidence > RELIABLE_CONFIDENCE_THRESHOLD;
 }
 
 /**
  * Add slang scores for a language if word/text matches
  */
 function addSlangScore(
-   scores: Record<string, number>,
-   lang: string,
-   text: string,
-   points: number,
+    scores: Record<string, number>,
+    lang: string,
+    text: string,
+    points: number,
 ): void {
-   if (SLANG_WORDS[lang]?.has(text)) {
-      scores[lang] += points;
-   }
+    if (SLANG_WORDS[lang]?.has(text)) {
+        scores[lang] += points;
+    }
 }
 
 /**
@@ -48,343 +48,343 @@ function addSlangScore(
  * @returns Slang detection result or null
  */
 function detectBySlang(
-   text: string,
-   allowedLanguages: string[] | null = null,
+    text: string,
+    allowedLanguages: string[] | null = null,
 ): SlangDetectionResult | null {
-   const lowerText = text.toLowerCase();
-   const normalizedLower = normalizeText(text).toLowerCase();
-   const languagesToCheck = allowedLanguages || ALL_SLANG_LANGUAGES;
+    const lowerText = text.toLowerCase();
+    const normalizedLower = normalizeText(text).toLowerCase();
+    const languagesToCheck = allowedLanguages || ALL_SLANG_LANGUAGES;
 
-   // Initialize scores
-   const scores: Record<string, number> = Object.fromEntries(
-      languagesToCheck.map((lang) => [lang, 0]),
-   );
+    // Initialize scores
+    const scores: Record<string, number> = Object.fromEntries(
+        languagesToCheck.map((lang) => [lang, 0]),
+    );
 
-   // Score individual words (1 point each)
-   const words = lowerText.split(/\s+/);
-   words.forEach((word) => {
-      languagesToCheck.forEach((lang) => {
-         addSlangScore(scores, lang, word, 1);
-      });
-   });
+    // Score individual words (1 point each)
+    const words = lowerText.split(/\s+/);
+    words.forEach((word) => {
+        languagesToCheck.forEach((lang) => {
+            addSlangScore(scores, lang, word, 1);
+        });
+    });
 
-   // Score full text matches (2 points - multi-word slang)
-   [lowerText, normalizedLower].forEach((txt) => {
-      languagesToCheck.forEach((lang) => {
-         addSlangScore(scores, lang, txt, 2);
-      });
-   });
+    // Score full text matches (2 points - multi-word slang)
+    [lowerText, normalizedLower].forEach((txt) => {
+        languagesToCheck.forEach((lang) => {
+            addSlangScore(scores, lang, txt, 2);
+        });
+    });
 
-   const total = Object.values(scores).reduce((sum, val) => sum + val, 0);
-   if (total === 0) {
-      return null;
-   }
+    const total = Object.values(scores).reduce((sum, val) => sum + val, 0);
+    if (total === 0) {
+        return null;
+    }
 
-   // Find winner - reduce also gives us the max score
-   const [winner, maxScore] = Object.entries(scores).reduce((a, b) => (b[1] > a[1] ? b : a));
+    // Find winner - reduce also gives us the max score
+    const [winner, maxScore] = Object.entries(scores).reduce((a, b) => (b[1] > a[1] ? b : a));
 
-   return { language: winner, confidence: maxScore / total, scores };
+    return { language: winner, confidence: maxScore / total, scores };
 }
 
 /**
  * Create a default/empty detection result
  */
 function createEmptyResult(allowedLanguages: string[] | null = null): DetectionResult {
-   return { language: allowedLanguages?.[0] ?? 'en', confidence: 0, isReliable: false };
+    return { language: allowedLanguages?.[0] ?? 'en', confidence: 0, isReliable: false };
 }
 
 /**
  * Create a slang-based detection result
  */
 function createSlangResult(
-   slangResult: SlangDetectionResult,
-   source: DetectionResult['source'],
-   // eslint-disable-next-line default-param-last
-   confidenceMultiplier = 1,
-   probabilities?: Record<string, number>,
+    slangResult: SlangDetectionResult,
+    source: DetectionResult['source'],
+    // eslint-disable-next-line default-param-last
+    confidenceMultiplier = 1,
+    probabilities?: Record<string, number>,
 ): DetectionResult {
-   const confidence = slangResult.confidence * confidenceMultiplier;
-   return {
-      language: slangResult.language,
-      confidence,
-      isReliable: isReliable(confidence),
-      source,
-      ...(probabilities && { probabilities }),
-   };
+    const confidence = slangResult.confidence * confidenceMultiplier;
+    return {
+        language: slangResult.language,
+        confidence,
+        isReliable: isReliable(confidence),
+        source,
+        ...(probabilities && { probabilities }),
+    };
 }
 
 /**
  * Check if slang should override ML prediction
  */
 function shouldSlangOverride(
-   slangResult: SlangDetectionResult,
-   prediction: PredictionResult,
+    slangResult: SlangDetectionResult,
+    prediction: PredictionResult,
 ): boolean {
-   if (slangResult.language === prediction.label) {
-      return false;
-   }
+    if (slangResult.language === prediction.label) {
+        return false;
+    }
 
-   const slangStrength = slangResult.scores[slangResult.language];
-   const opposingStrength = slangResult.scores[prediction.label] || 0;
+    const slangStrength = slangResult.scores[slangResult.language];
+    const opposingStrength = slangResult.scores[prediction.label] || 0;
 
-   return slangStrength >= 2 && slangStrength > opposingStrength + 1;
+    return slangStrength >= 2 && slangStrength > opposingStrength + 1;
 }
 
 /**
  * Combine ML and slang signals for low-confidence predictions
  */
 function combineMLAndSlang(
-   prediction: PredictionResult,
-   slangResult: SlangDetectionResult,
+    prediction: PredictionResult,
+    slangResult: SlangDetectionResult,
 ): DetectionResult {
-   const confidence = (prediction.confidence + slangResult.confidence) / 2;
-   return {
-      language: slangResult.language,
-      confidence,
-      isReliable: isReliable(confidence),
-      probabilities: prediction.probabilities,
-      source: 'combined',
-   };
+    const confidence = (prediction.confidence + slangResult.confidence) / 2;
+    return {
+        language: slangResult.language,
+        confidence,
+        isReliable: isReliable(confidence),
+        probabilities: prediction.probabilities,
+        source: 'combined',
+    };
 }
 
 /**
  * Create ML-based detection result
  */
 function createMLResult(prediction: PredictionResult): DetectionResult {
-   return {
-      language: prediction.label,
-      confidence: prediction.confidence,
-      isReliable: isReliable(prediction.confidence),
-      probabilities: prediction.probabilities,
-      source: 'ml',
-   };
+    return {
+        language: prediction.label,
+        confidence: prediction.confidence,
+        isReliable: isReliable(prediction.confidence),
+        probabilities: prediction.probabilities,
+        source: 'ml',
+    };
 }
 
 /**
  * Handle short text detection (slang priority)
  */
 function detectShortText(
-   text: string,
-   allowedLanguages: string[] | null = null,
+    text: string,
+    allowedLanguages: string[] | null = null,
 ): DetectionResult | null {
-   const slangResult = detectBySlang(text, allowedLanguages);
-   if (slangResult && slangResult.confidence >= SLANG_MIN_CONFIDENCE) {
-      return createSlangResult(slangResult, 'slang');
-   }
-   return null;
+    const slangResult = detectBySlang(text, allowedLanguages);
+    if (slangResult && slangResult.confidence >= SLANG_MIN_CONFIDENCE) {
+        return createSlangResult(slangResult, 'slang');
+    }
+    return null;
 }
 
 /**
  * Handle very short text (< 3 chars normalized)
  */
 function detectVeryShortText(
-   text: string,
-   allowedLanguages: string[] | null = null,
+    text: string,
+    allowedLanguages: string[] | null = null,
 ): DetectionResult {
-   const slangResult = detectBySlang(text, allowedLanguages);
-   if (slangResult) {
-      // Very short text gets reduced confidence
-      return createSlangResult(slangResult, 'slang', 0.5);
-   }
-   return createEmptyResult(allowedLanguages);
+    const slangResult = detectBySlang(text, allowedLanguages);
+    if (slangResult) {
+        // Very short text gets reduced confidence
+        return createSlangResult(slangResult, 'slang', 0.5);
+    }
+    return createEmptyResult(allowedLanguages);
 }
 
 /**
  * Options for setAllowedLanguages
  */
 export interface AllowedLanguagesOptions {
-   /**
-    * When true, only computes probabilities for allowed languages (faster).
-    * When false (default), computes all probabilities to detect "neither" case.
-    * @default false
-    */
-   fastMode?: boolean;
+    /**
+     * When true, only computes probabilities for allowed languages (faster).
+     * When false (default), computes all probabilities to detect "neither" case.
+     * @default false
+     */
+    fastMode?: boolean;
 }
 
 export class LanguageDetector {
-   private _vectorizer: TfidfVectorizer | null;
-   private _classifier: NaiveBayesClassifier | null;
-   private _loaded: boolean;
-   private _config: Record<string, unknown> | null;
-   private _allowedLanguages: string[] | null;
-   private _fastMode: boolean;
+    private _vectorizer: TfidfVectorizer | null;
+    private _classifier: NaiveBayesClassifier | null;
+    private _loaded: boolean;
+    private _config: Record<string, unknown> | null;
+    private _allowedLanguages: string[] | null;
+    private _fastMode: boolean;
 
-   constructor() {
-      this._vectorizer = null;
-      this._classifier = null;
-      this._loaded = false;
-      this._config = null;
-      this._allowedLanguages = null;
-      this._fastMode = false;
-   }
+    constructor() {
+        this._vectorizer = null;
+        this._classifier = null;
+        this._loaded = false;
+        this._config = null;
+        this._allowedLanguages = null;
+        this._fastMode = false;
+    }
 
-   get isLoaded(): boolean {
-      return this._loaded;
-   }
+    get isLoaded(): boolean {
+        return this._loaded;
+    }
 
-   get supportedLanguages(): string[] {
-      if (!this._loaded || !this._classifier) {
-         return [];
-      }
-      return this._classifier.classes;
-   }
+    get supportedLanguages(): string[] {
+        if (!this._loaded || !this._classifier) {
+            return [];
+        }
+        return this._classifier.classes;
+    }
 
-   /**
-    * Get the currently allowed languages for detection
-    * Returns null if all languages are allowed
-    */
-   get allowedLanguages(): string[] | null {
-      return this._allowedLanguages;
-   }
+    /**
+     * Get the currently allowed languages for detection
+     * Returns null if all languages are allowed
+     */
+    get allowedLanguages(): string[] | null {
+        return this._allowedLanguages;
+    }
 
-   /**
-    * Get whether fast mode is enabled
-    * Fast mode skips "neither" detection for better performance
-    */
-   get fastMode(): boolean {
-      return this._fastMode;
-   }
+    /**
+     * Get whether fast mode is enabled
+     * Fast mode skips "neither" detection for better performance
+     */
+    get fastMode(): boolean {
+        return this._fastMode;
+    }
 
-   /**
-    * Limit detection to specific languages only
-    * When set, the detector will only return one of these languages
-    * @param languages - Array of language codes to allow (e.g., ['en', 'es'])
-    * @param options - Optional settings
-    * @param options.fastMode - When true, skips "neither" detection for ~3x speedup (default: false)
-    * @returns this for chaining
-    */
-   setAllowedLanguages(languages: string[], options: AllowedLanguagesOptions = {}): this {
-      if (!Array.isArray(languages) || languages.length === 0) {
-         throw new Error('allowedLanguages must be a non-empty array of language codes');
-      }
+    /**
+     * Limit detection to specific languages only
+     * When set, the detector will only return one of these languages
+     * @param languages - Array of language codes to allow (e.g., ['en', 'es'])
+     * @param options - Optional settings
+     * @param options.fastMode - When true, skips "neither" detection for ~3x speedup (default: false)
+     * @returns this for chaining
+     */
+    setAllowedLanguages(languages: string[], options: AllowedLanguagesOptions = {}): this {
+        if (!Array.isArray(languages) || languages.length === 0) {
+            throw new Error('allowedLanguages must be a non-empty array of language codes');
+        }
 
-      // Validate against supported languages if model is loaded
-      if (this._loaded) {
-         const supported = this.supportedLanguages;
-         const invalid = languages.filter((lang) => !supported.includes(lang));
-         if (invalid.length > 0) {
-            console.warn(
-               `Warning: Some languages are not in the model: ${invalid.join(', ')}. ` +
-                  `Supported: ${supported.join(', ')}`,
-            );
-         }
-      }
+        // Validate against supported languages if model is loaded
+        if (this._loaded) {
+            const supported = this.supportedLanguages;
+            const invalid = languages.filter((lang) => !supported.includes(lang));
+            if (invalid.length > 0) {
+                console.warn(
+                    `Warning: Some languages are not in the model: ${invalid.join(', ')}. ` +
+                        `Supported: ${supported.join(', ')}`,
+                );
+            }
+        }
 
-      this._allowedLanguages = [...languages];
-      this._fastMode = options.fastMode ?? false;
-      return this;
-   }
+        this._allowedLanguages = [...languages];
+        this._fastMode = options.fastMode ?? false;
+        return this;
+    }
 
-   /**
-    * Clear language restrictions, allowing all supported languages
-    * Also resets fastMode to false
-    * @returns this for chaining
-    */
-   clearAllowedLanguages(): this {
-      this._allowedLanguages = null;
-      this._fastMode = false;
-      return this;
-   }
+    /**
+     * Clear language restrictions, allowing all supported languages
+     * Also resets fastMode to false
+     * @returns this for chaining
+     */
+    clearAllowedLanguages(): this {
+        this._allowedLanguages = null;
+        this._fastMode = false;
+        return this;
+    }
 
-   /**
-    * Load model from JSON data
-    */
-   loadModel(modelData: ModelData): this {
-      if (!modelData?.vectorizer || !modelData?.classifier) {
-         throw new Error('Invalid model data: missing vectorizer or classifier');
-      }
+    /**
+     * Load model from JSON data
+     */
+    loadModel(modelData: ModelData): this {
+        if (!modelData?.vectorizer || !modelData?.classifier) {
+            throw new Error('Invalid model data: missing vectorizer or classifier');
+        }
 
-      this._vectorizer = TfidfVectorizer.fromJSON(modelData.vectorizer);
-      this._classifier = NaiveBayesClassifier.fromJSON(modelData.classifier);
-      this._config = modelData.config ?? {};
-      this._loaded = true;
+        this._vectorizer = TfidfVectorizer.fromJSON(modelData.vectorizer);
+        this._classifier = NaiveBayesClassifier.fromJSON(modelData.classifier);
+        this._config = modelData.config ?? {};
+        this._loaded = true;
 
-      console.log(`Language Detector loaded: ${this.supportedLanguages.join(', ')}`);
-      return this;
-   }
+        console.log(`Language Detector loaded: ${this.supportedLanguages.join(', ')}`);
+        return this;
+    }
 
-   /**
-    * Load model from file path
-    */
-   loadFromFile(filePath: string): this {
-      const modelData: ModelData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-      return this.loadModel(modelData);
-   }
+    /**
+     * Load model from file path
+     */
+    loadFromFile(filePath: string): this {
+        const modelData: ModelData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+        return this.loadModel(modelData);
+    }
 
-   /**
-    * Detect language of text
-    */
-   detect(text: string | null | undefined): DetectionResult {
-      this._ensureModelLoaded();
+    /**
+     * Detect language of text
+     */
+    detect(text: string | null | undefined): DetectionResult {
+        this._ensureModelLoaded();
 
-      if (!text || typeof text !== 'string' || text.trim().length === 0) {
-         return createEmptyResult(this._allowedLanguages);
-      }
+        if (!text || typeof text !== 'string' || text.trim().length === 0) {
+            return createEmptyResult(this._allowedLanguages);
+        }
 
-      const trimmedText = text.trim();
-      const normalized = normalizeText(text);
+        const trimmedText = text.trim();
+        const normalized = normalizeText(text);
 
-      // Short text: prioritize slang detection
-      if (trimmedText.length <= SHORT_TEXT_THRESHOLD) {
-         const result = detectShortText(trimmedText, this._allowedLanguages);
-         if (result) {
-            return result;
-         }
-      }
+        // Short text: prioritize slang detection
+        if (trimmedText.length <= SHORT_TEXT_THRESHOLD) {
+            const result = detectShortText(trimmedText, this._allowedLanguages);
+            if (result) {
+                return result;
+            }
+        }
 
-      // Very short text: slang only
-      if (normalized.length < MIN_ML_TEXT_LENGTH) {
-         return detectVeryShortText(trimmedText, this._allowedLanguages);
-      }
+        // Very short text: slang only
+        if (normalized.length < MIN_ML_TEXT_LENGTH) {
+            return detectVeryShortText(trimmedText, this._allowedLanguages);
+        }
 
-      // ML-based detection with slang fallback
-      return this._detectWithML(trimmedText, normalized);
-   }
+        // ML-based detection with slang fallback
+        return this._detectWithML(trimmedText, normalized);
+    }
 
-   /**
-    * Detect language for multiple texts
-    */
-   detectBatch(texts: string[]): DetectionResult[] {
-      return texts.map((text) => this.detect(text));
-   }
+    /**
+     * Detect language for multiple texts
+     */
+    detectBatch(texts: string[]): DetectionResult[] {
+        return texts.map((text) => this.detect(text));
+    }
 
-   /**
-    * Ensure model is loaded before detection
-    */
-   private _ensureModelLoaded(): void {
-      if (!this._loaded || !this._vectorizer || !this._classifier) {
-         throw new Error('Model must be loaded before detection');
-      }
-   }
+    /**
+     * Ensure model is loaded before detection
+     */
+    private _ensureModelLoaded(): void {
+        if (!this._loaded || !this._vectorizer || !this._classifier) {
+            throw new Error('Model must be loaded before detection');
+        }
+    }
 
-   /**
-    * ML-based detection with slang override/fallback
-    */
-   private _detectWithML(trimmedText: string, normalized: string): DetectionResult {
-      const vector = this._vectorizer!.transform(normalized);
-      const prediction = this._classifier!.predict(
-         vector,
-         this._allowedLanguages ?? undefined,
-         this._fastMode,
-      );
-      const slangResult = detectBySlang(trimmedText, this._allowedLanguages);
+    /**
+     * ML-based detection with slang override/fallback
+     */
+    private _detectWithML(trimmedText: string, normalized: string): DetectionResult {
+        const vector = this._vectorizer!.transform(normalized);
+        const prediction = this._classifier!.predict(
+            vector,
+            this._allowedLanguages ?? undefined,
+            this._fastMode,
+        );
+        const slangResult = detectBySlang(trimmedText, this._allowedLanguages);
 
-      // Check if slang should override ML
-      if (slangResult && shouldSlangOverride(slangResult, prediction)) {
-         return createSlangResult(slangResult, 'slang-override', 1, prediction.probabilities);
-      }
+        // Check if slang should override ML
+        if (slangResult && shouldSlangOverride(slangResult, prediction)) {
+            return createSlangResult(slangResult, 'slang-override', 1, prediction.probabilities);
+        }
 
-      // Low ML confidence: combine with slang
-      if (
-         prediction.confidence < ML_LOW_CONFIDENCE_THRESHOLD &&
-         slangResult &&
-         slangResult.confidence > SLANG_MIN_CONFIDENCE
-      ) {
-         return combineMLAndSlang(prediction, slangResult);
-      }
+        // Low ML confidence: combine with slang
+        if (
+            prediction.confidence < ML_LOW_CONFIDENCE_THRESHOLD &&
+            slangResult &&
+            slangResult.confidence > SLANG_MIN_CONFIDENCE
+        ) {
+            return combineMLAndSlang(prediction, slangResult);
+        }
 
-      return createMLResult(prediction);
-   }
+        return createMLResult(prediction);
+    }
 }
 
 // Singleton instance for reuse
@@ -394,16 +394,16 @@ let _detectorInstance: LanguageDetector | null = null;
  * Get or create detector instance
  */
 export function getDetector(modelPath: string): LanguageDetector {
-   if (!_detectorInstance) {
-      _detectorInstance = new LanguageDetector();
-      _detectorInstance.loadFromFile(modelPath);
-   }
-   return _detectorInstance;
+    if (!_detectorInstance) {
+        _detectorInstance = new LanguageDetector();
+        _detectorInstance.loadFromFile(modelPath);
+    }
+    return _detectorInstance;
 }
 
 /**
  * Reset singleton instance (for testing)
  */
 export function resetDetector(): void {
-   _detectorInstance = null;
+    _detectorInstance = null;
 }

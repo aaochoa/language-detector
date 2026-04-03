@@ -16,81 +16,81 @@ export type DetectionSource = 'ml' | 'slang' | 'slang-override' | 'combined';
  * Language detection result
  */
 export interface DetectionResult {
-   /** Detected language code */
-   language: string;
-   /** Confidence score (0-1) */
-   confidence: number;
-   /** Whether the detection is reliable (confidence > 0.7) */
-   isReliable: boolean;
-   /** Probability distribution across languages */
-   probabilities?: Record<string, number>;
-   /** Source of the detection */
-   source?: DetectionSource;
+    /** Detected language code */
+    language: string;
+    /** Confidence score (0-1) */
+    confidence: number;
+    /** Whether the detection is reliable (confidence > 0.7) */
+    isReliable: boolean;
+    /** Probability distribution across languages */
+    probabilities?: Record<string, number>;
+    /** Source of the detection */
+    source?: DetectionSource;
 }
 
 /**
  * Slang detection result
  */
 export interface SlangDetectionResult {
-   /** Detected language */
-   language: string;
-   /** Confidence score */
-   confidence: number;
-   /** Match scores per language */
-   scores: Record<string, number>;
+    /** Detected language */
+    language: string;
+    /** Confidence score */
+    confidence: number;
+    /** Match scores per language */
+    scores: Record<string, number>;
 }
 
 /**
  * Naive Bayes prediction result
  */
 export interface PredictionResult {
-   /** Predicted label */
-   label: string;
-   /** Confidence score */
-   confidence: number;
-   /** Probability distribution */
-   probabilities: Record<string, number>;
+    /** Predicted label */
+    label: string;
+    /** Confidence score */
+    confidence: number;
+    /** Probability distribution */
+    probabilities: Record<string, number>;
 }
 
 /**
  * TF-IDF Vectorizer options
  */
 export interface VectorizerOptions {
-   /** Minimum n-gram size (default: 2) */
-   minN?: number;
-   /** Maximum n-gram size (default: 4) */
-   maxN?: number;
-   /** Maximum number of features (default: 5000) */
-   maxFeatures?: number;
+    /** Minimum n-gram size (default: 2) */
+    minN?: number;
+    /** Maximum n-gram size (default: 4) */
+    maxN?: number;
+    /** Maximum number of features (default: 5000) */
+    maxFeatures?: number;
 }
 
 /**
  * Serialized TF-IDF Vectorizer data
  */
 export interface VectorizerData {
-   minN: number;
-   maxN: number;
-   maxFeatures: number;
-   vocabulary: Record<string, number>;
-   idf: Record<string, number>;
+    minN: number;
+    maxN: number;
+    maxFeatures: number;
+    vocabulary: Record<string, number>;
+    idf: Record<string, number>;
 }
 
 /**
  * Serialized Naive Bayes Classifier data
  */
 export interface ClassifierData {
-   classPriors: Record<string, number>;
-   featureMeans: Record<string, number[]>;
-   featureVariances: Record<string, number[]>;
+    classPriors: Record<string, number>;
+    featureMeans: Record<string, number[]>;
+    featureVariances: Record<string, number[]>;
 }
 
 /**
  * Complete model data for serialization
  */
 export interface ModelData {
-   vectorizer: VectorizerData;
-   classifier: ClassifierData;
-   config?: Record<string, unknown>;
+    vectorizer: VectorizerData;
+    classifier: ClassifierData;
+    config?: Record<string, unknown>;
 }
 
 /**
