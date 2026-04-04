@@ -33,7 +33,7 @@ const SIZE_CONFIGS = {
     },
 };
 
-const LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de'];
+const LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de', 'nl'];
 const TEST_SPLIT = 0.2;
 const PROCESSED_DIR = path.join(__dirname, '../data/processed');
 const MODELS_DIR = path.join(__dirname, '../models');

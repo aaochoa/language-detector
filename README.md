@@ -17,14 +17,15 @@ A **Naive Bayes language detector** optimized for short, informal text like SMS 
 | `it` | Italian    | 🇮🇹     | ~350+       | Standard Italian, regional variants (cmq, tvb, xke)                                                       |
 | `pt` | Portuguese | 🇧🇷🇵🇹   | ~500+       | Brazilian (pt-BR) & European (pt-PT) Portuguese                                                           |
 | `de` | German     | 🇩🇪🇦🇹🇨🇭 | ~400+       | Standard German, Austrian, Swiss German, youth slang (Jugendsprache)                                      |
+| `nl` | Dutch      | 🇳🇱🇧🇪   | ~300+       | Netherlands Dutch and Belgian Dutch (Flemish)                                                             |
 
-**Total: ~4,600+ slang terms** across all languages for improved informal text detection.
+**Total: ~4,900+ slang terms** across all languages for improved informal text detection.
 
 ## Features
 
 - ✅ **Optimized for short text**: Works well with SMS and chat messages (1-50 words)
 - ✅ **Handles informal language**: Supports slang, abbreviations, and texting patterns
-- ✅ **Multi-language support**: 6 languages with regional variations
+- ✅ **Multi-language support**: 7 languages with regional variations
 - ✅ **Language filtering**: Restrict detection to specific languages with "neither" detection
 - ✅ **Fast inference**: <5ms per detection, suitable for real-time applications
 - ✅ **TypeScript support**: Full type definitions included
@@ -55,7 +56,7 @@ console.log(result);
 //     language: 'es',
 //     confidence: 0.95,
 //     isReliable: true,
-//     probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.005, de: 0.005 },
+//     probabilities: { es: 0.95, en: 0.01, fr: 0.02, it: 0.01, pt: 0.005, de: 0.005, nl: 0.0 },
 //     source: 'ml'
 // }
 
@@ -69,9 +70,9 @@ Three pre-trained models are bundled with the package, trading off size and spee
 
 | Size     | Vocabulary | Accuracy           | Model size |
 | -------- | ---------- | ------------------ | ---------- |
-| `small`  | 1,000      | 97.31% (1050/1079) | ~0.4 MB    |
-| `medium` | 3,000      | 99.26% (1071/1079) | ~1.1 MB    |
-| `large`  | 5,000      | 99.81% (1077/1079) | ~1.7 MB    |
+| `small`  | 1,000      | 97.21% (1116/1148) | ~0.4 MB    |
+| `medium` | 3,000      | 99.48% (1142/1148) | ~1.1 MB    |
+| `large`  | 5,000      | 99.39% (1141/1148) | ~1.7 MB    |
 
 ```typescript
 import { getDetector, getModelPath } from 'naive-bayes-language-detector';
@@ -111,7 +112,7 @@ Detect the language of a single text.
 
 ```typescript
 interface DetectionResult {
-    language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt', 'de')
+    language: string; // Detected language code ('en', 'es', 'fr', 'it', 'pt', 'de', 'nl')
     confidence: number; // Confidence score (0-1)
     isReliable: boolean; // True if confidence > 0.7
     probabilities?: Record<string, number>; // Probability per language
@@ -167,7 +168,7 @@ Remove language restrictions and detect all supported languages again.
 
 ```typescript
 detector.clearAllowedLanguages();
-// Now detects all 6 languages
+// Now detects all 7 languages
 ```
 
 ### `LanguageDetector.allowedLanguages: string[] | null`
@@ -244,6 +245,7 @@ For short/ambiguous texts, the detector uses comprehensive slang dictionaries:
 | Italian    | cmq, tvb, xke, nn, qlc, grz                     |
 | Portuguese | kkk, blz, vlw, tmj, mano, bora, fixe            |
 | German     | digga, krass, geil, oida, leiwand, hdl, vllt    |
+| Dutch      | doei, tof, gezellig, idd, sws, aub, ff, jeetje  |
 
 ## Training Your Own Model
 
@@ -291,7 +293,7 @@ npm run evaluate -- --size small    # evaluate a specific size
 npm run evaluate -- --size large -i # interactive mode
 ```
 
-Runs the model against 1079 test cases and reports accuracy.
+Runs the model against 1148 test cases and reports accuracy.
 
 ## Text Normalization
 
@@ -328,7 +330,7 @@ language-detector/
 
 ```typescript
 import type {
-    LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de'
+    LanguageCode, // 'en' | 'es' | 'fr' | 'it' | 'pt' | 'de' | 'nl'
     ModelSize, // 'small' | 'medium' | 'large'
     DetectionResult,
     DetectionSource,
@@ -401,7 +403,7 @@ npm install
 | -------------- | ------------- | ------------- | ------------------------ |
 | Inference time | <5ms per text | <5ms per text | <5ms per text            |
 | Model size     | ~0.4 MB       | ~1.1 MB       | ~1.7 MB                  |
-| Accuracy       | 97.31%        | 99.26%        | 99.81% (1079 test cases) |
+| Accuracy       | 97.21%        | 99.48%        | 99.39% (1148 test cases) |
 | Memory usage   | ~15 MB loaded | ~30 MB loaded | ~50 MB loaded            |
 
 ## License

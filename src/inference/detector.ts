@@ -25,7 +25,7 @@ const ML_LOW_CONFIDENCE_THRESHOLD = 0.6;
 const RELIABLE_CONFIDENCE_THRESHOLD = 0.7;
 
 // All supported language codes for slang detection
-const ALL_SLANG_LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de'];
+const ALL_SLANG_LANGUAGES = ['es', 'en', 'fr', 'it', 'pt', 'de', 'nl'];
 
 /**
  * Check if confidence is above reliable threshold
