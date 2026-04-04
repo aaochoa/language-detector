@@ -60,7 +60,6 @@ const GERMAN_SLANG = new Set([
     'adieu',
     'grüezi',
     'sali',
-    'hoi',
 
     // ==========================================
     // TEXTING ABBREVIATIONS
@@ -549,6 +548,8 @@ const GERMAN_SLANG = new Set([
     'sali',
     'salü',
     'hoi zäme',
+    'sali zäme',
+    'hoi zäme wie gaht',
     'tschau zäme',
     'uf widerluege',
     'adie',

@@ -16,8 +16,9 @@
  * - Italian (it): ~350+ terms - Regional expressions, youth slang
  * - Portuguese (pt): ~500+ terms - Both Brazilian (pt-BR) and European (pt-PT)
  * - German (de): ~400+ terms - Standard German, Austrian, Swiss, youth slang
+ * - Dutch (nl): ~300+ terms - Netherlands Dutch and Belgian Dutch (Flemish)
  *
- * Total terms: ~4600+
+ * Total terms: ~4900+
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -29,6 +30,7 @@ const FRENCH_SLANG = unwrapDefault(require('./slang-french.data'));
 const ITALIAN_SLANG = unwrapDefault(require('./slang-italian.data'));
 const PORTUGUESE_SLANG = unwrapDefault(require('./slang-portuguese.data'));
 const GERMAN_SLANG = unwrapDefault(require('./slang-german.data'));
+const DUTCH_SLANG = unwrapDefault(require('./slang-dutch.data'));
 
 /**
  * Combined slang dictionaries export
@@ -40,6 +42,7 @@ const SLANG_WORDS = {
     it: ITALIAN_SLANG,
     pt: PORTUGUESE_SLANG,
     de: GERMAN_SLANG,
+    nl: DUTCH_SLANG,
 };
 
 module.exports = {
@@ -50,4 +53,5 @@ module.exports = {
     ITALIAN_SLANG,
     PORTUGUESE_SLANG,
     GERMAN_SLANG,
+    DUTCH_SLANG,
 };

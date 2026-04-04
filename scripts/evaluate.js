@@ -1435,6 +1435,105 @@ const TEST_CASES = [
     { text: 'herzlichen glückwunsch', expected: 'de' },
     { text: 'viel erfolg', expected: 'de' },
     { text: 'gute besserung', expected: 'de' },
+
+    // ==========================================
+    // DUTCH - Basic conversational
+    // ==========================================
+    { text: 'hoi hoe gaat het', expected: 'nl' },
+    { text: 'goedemorgen hoe is het', expected: 'nl' },
+    { text: 'heel erg bedankt voor alles', expected: 'nl' },
+    { text: 'waar ben je nu', expected: 'nl' },
+    { text: 'tot ziens doei', expected: 'nl' },
+    { text: 'kom je ook mee', expected: 'nl' },
+    { text: 'wanneer ben je thuis', expected: 'nl' },
+    { text: 'dat is prima zo', expected: 'nl' },
+    { text: 'ik begrijp het niet', expected: 'nl' },
+    { text: 'dat weet ik niet', expected: 'nl' },
+
+    // DUTCH - Longer sentences
+    { text: 'gisteren ben ik naar de supermarkt geweest om boodschappen te doen', expected: 'nl' },
+    { text: 'ik kan niet geloven dat het alweer vrijdag is de week ging zo snel', expected: 'nl' },
+    { text: 'mijn zus komt ons volgend weekend bezoeken', expected: 'nl' },
+    { text: 'ik moet met je praten over iets heel belangrijks', expected: 'nl' },
+    { text: 'het is heel koud vandaag je kunt beter thuis blijven', expected: 'nl' },
+
+    // DUTCH - Questions
+    { text: 'hoe laat ga je van je werk weg', expected: 'nl' },
+    { text: 'hoeveel kost het vliegticket', expected: 'nl' },
+    { text: 'wie brengt de kinderen naar school', expected: 'nl' },
+    { text: 'wanneer heb je voor het laatst met haar gesproken', expected: 'nl' },
+    { text: 'hoe kom ik bij jouw huis', expected: 'nl' },
+
+    // DUTCH - Informal/Slang
+    { text: 'wat doe je vanavond', expected: 'nl' },
+    { text: 'ik heb er echt geen zin in', expected: 'nl' },
+    { text: 'dat is echt super tof', expected: 'nl' },
+    { text: 'hoe gaat ie met jou', expected: 'nl' },
+    { text: 'ff wachten ben er bijna', expected: 'nl' },
+    { text: 'idd dat klopt helemaal', expected: 'nl' },
+    { text: 'sws kom ik langs', expected: 'nl' },
+    { text: 'ik snap er niks van', expected: 'nl' },
+    { text: 'gezellig zeg', expected: 'nl' },
+    { text: 'hartstikke bedankt', expected: 'nl' },
+
+    // DUTCH - Texting abbreviations
+    { text: 'gr en tot snel', expected: 'nl' },
+    { text: 'ff bellen straks', expected: 'nl' },
+    { text: 'kan jij idd ook komen', expected: 'nl' },
+
+    // DUTCH - Emotions/Reactions
+    { text: 'wat jammer dat je er niet bij kan zijn', expected: 'nl' },
+    { text: 'ik ben zo blij voor je', expected: 'nl' },
+    { text: 'wat erg dat is heel vervelend', expected: 'nl' },
+    { text: 'jeetje dat is echt waanzinnig', expected: 'nl' },
+    { text: 'gefeliciteerd met je verjaardag', expected: 'nl' },
+
+    // DUTCH - Customer service
+    { text: 'ik wil graag een bestelling annuleren', expected: 'nl' },
+    { text: 'wanneer wordt mijn pakket bezorgd', expected: 'nl' },
+    { text: 'ik heb te veel betaald voor dit product', expected: 'nl' },
+    { text: 'kan ik dit artikel terugbrengen', expected: 'nl' },
+
+    // DUTCH - Weather
+    { text: 'het regent de hele dag', expected: 'nl' },
+    { text: 'het is prachtig weer vandaag', expected: 'nl' },
+    { text: 'er komt een storm aan vanavond', expected: 'nl' },
+
+    // DUTCH - Work/School
+    { text: 'de vergadering begint om tien uur', expected: 'nl' },
+    { text: 'kun je het document naar mij sturen', expected: 'nl' },
+    { text: 'ik heb de hele dag vergaderd', expected: 'nl' },
+
+    // DUTCH - Food/Restaurant
+    { text: 'zullen we vanavond uit eten gaan', expected: 'nl' },
+    { text: 'ik lust geen vlees meer', expected: 'nl' },
+    { text: 'het eten was heel lekker', expected: 'nl' },
+
+    // DUTCH - Travel
+    { text: 'hoe laat vertrekt de trein', expected: 'nl' },
+    { text: 'ik moet een hotel boeken', expected: 'nl' },
+    { text: 'waar is het vliegveld', expected: 'nl' },
+
+    // DUTCH - Very short
+    { text: 'hoi', expected: 'nl' },
+    { text: 'doei', expected: 'nl' },
+    { text: 'ja tuurlijk', expected: 'nl' },
+    { text: 'geen idee', expected: 'nl' },
+    { text: 'lekker bezig', expected: 'nl' },
+    { text: 'gezellig', expected: 'nl' },
+
+    // DUTCH - Greetings/Farewells
+    { text: 'goedenavond hoe was je dag', expected: 'nl' },
+    { text: 'goedenacht slaap lekker', expected: 'nl' },
+    { text: 'tot morgen dan', expected: 'nl' },
+    { text: 'fijn weekend verder', expected: 'nl' },
+    { text: 'veel succes morgen', expected: 'nl' },
+    { text: 'beterschap hoop dat je snel beter bent', expected: 'nl' },
+
+    // DUTCH - Flemish
+    { text: 'allez kom dan toch', expected: 'nl' },
+    { text: 'amai dat is echt schoon', expected: 'nl' },
+    { text: 'awel zeker weten', expected: 'nl' },
 ];
 
 /**
