@@ -218,8 +218,7 @@ describe('NaiveBayesClassifier', () => {
 
             const json = classifier.toJSON();
             expect(json).to.have.property('classPriors');
-            expect(json).to.have.property('featureMeans');
-            expect(json).to.have.property('featureVariances');
+            expect(json).to.have.property('featureWeights');
         });
 
         it('should deserialize from JSON', () => {

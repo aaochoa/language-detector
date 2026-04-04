@@ -1,12 +1,16 @@
 /* eslint-disable no-console */
 /**
- * Naive Bayes Classifier for language detection
+ * Multinomial Naive Bayes Classifier for language detection
+ *
+ * Models the log-probability of each feature given each class,
+ * using Laplace-smoothed feature counts. Designed for sparse
+ * TF-IDF / count vectors from character n-grams.
  */
 
 import type { ClassifierData, PredictionResult } from '../types';
 
-// Laplace smoothing constant to avoid zero variance
-const VARIANCE_SMOOTHING = 1e-9;
+// Laplace smoothing parameter
+const ALPHA = 1.0;
 
 /**
  * Group vectors by their labels
@@ -30,55 +34,42 @@ function groupVectorsByLabel(
 }
 
 /**
- * Compute mean values for each feature
+ * Sum feature values across all vectors for a set of documents
  */
-function computeMeans(labelVectors: number[][]): number[] {
+function sumFeatures(labelVectors: number[][]): number[] {
     const numFeatures = labelVectors[0].length;
-    const means = new Array<number>(numFeatures).fill(0);
+    const sums = new Array<number>(numFeatures).fill(0);
 
     labelVectors.forEach((vector) => {
         vector.forEach((val, i) => {
-            means[i] += val;
+            sums[i] += val;
         });
     });
 
-    means.forEach((sum, i) => {
-        means[i] = sum / labelVectors.length;
-    });
-
-    return means;
+    return sums;
 }
 
 /**
- * Compute variance values for each feature with Laplace smoothing
+ * Compute multinomial log-probabilities for a class:
+ * logProb[i] = log((classSums[i] + alpha) / (classTotal + alpha * nFeatures))
  */
-function computeVariances(labelVectors: number[][], means: number[]): number[] {
-    const numFeatures = labelVectors[0].length;
-    const variances = new Array<number>(numFeatures).fill(0);
+function computeMultinomialLogProbs(classSums: number[], nFeatures: number): number[] {
+    const classTotal = classSums.reduce((sum, val) => sum + val, 0);
+    const denominator = classTotal + ALPHA * nFeatures;
 
-    labelVectors.forEach((vector) => {
-        vector.forEach((val, i) => {
-            variances[i] += (val - means[i]) ** 2;
-        });
-    });
-
-    variances.forEach((sumSq, i) => {
-        variances[i] = sumSq / labelVectors.length + VARIANCE_SMOOTHING;
-    });
-
-    return variances;
+    return classSums.map((count) => Math.log((count + ALPHA) / denominator));
 }
 
 /**
- * Find the best label from log probabilities
+ * Find the best label from scores
  */
-function findBestLabel(logProbs: Record<string, number>): string {
+function findBestLabel(scores: Record<string, number>): string {
     let bestLabel: string | null = null;
-    let bestLogProb = -Infinity;
+    let bestScore = -Infinity;
 
-    Object.entries(logProbs).forEach(([label, logProb]) => {
-        if (logProb > bestLogProb) {
-            bestLogProb = logProb;
+    Object.entries(scores).forEach(([label, score]) => {
+        if (score > bestScore) {
+            bestScore = score;
             bestLabel = label;
         }
     });
@@ -87,36 +78,36 @@ function findBestLabel(logProbs: Record<string, number>): string {
 }
 
 /**
- * Filter log probabilities to only include allowed classes
+ * Filter scores to only include allowed classes
  */
-function filterLogProbs(
-    logProbs: Record<string, number>,
+function filterScores(
+    scores: Record<string, number>,
     allowedClasses: string[],
 ): Record<string, number> {
     const filtered: Record<string, number> = {};
     allowedClasses.forEach((cls) => {
-        if (cls in logProbs) {
-            filtered[cls] = logProbs[cls];
+        if (cls in scores) {
+            filtered[cls] = scores[cls];
         }
     });
     return filtered;
 }
 
 /**
- * Convert log probabilities to normalized probabilities
+ * Convert scores to normalized probabilities using softmax
  */
-function normalizeProbabilities(logProbs: Record<string, number>): Record<string, number> {
-    const maxLogProb = Math.max(...Object.values(logProbs));
-    const expProbs: Record<string, number> = {};
-    let sumExpProbs = 0;
+function normalizeProbabilities(scores: Record<string, number>): Record<string, number> {
+    const maxScore = Math.max(...Object.values(scores));
+    const expScores: Record<string, number> = {};
+    let sumExp = 0;
 
-    Object.entries(logProbs).forEach(([label, logProb]) => {
-        expProbs[label] = Math.exp(logProb - maxLogProb);
-        sumExpProbs += expProbs[label];
+    Object.entries(scores).forEach(([label, score]) => {
+        expScores[label] = Math.exp(score - maxScore);
+        sumExp += expScores[label];
     });
 
     return Object.fromEntries(
-        Object.entries(expProbs).map(([label, prob]) => [label, prob / sumExpProbs]),
+        Object.entries(expScores).map(([label, exp]) => [label, exp / sumExp]),
     );
 }
 
@@ -128,14 +119,14 @@ function createFallbackResult(fallbackLabel: string): PredictionResult {
 }
 
 /**
- * Create prediction result from log probabilities
+ * Create prediction result from scores
  */
-function createPredictionFromLogProbs(
-    logProbs: Record<string, number>,
+function createPredictionFromScores(
+    scores: Record<string, number>,
     confidenceOverride?: number,
 ): PredictionResult {
-    const bestLabel = findBestLabel(logProbs);
-    const probabilities = normalizeProbabilities(logProbs);
+    const bestLabel = findBestLabel(scores);
+    const probabilities = normalizeProbabilities(scores);
     const confidence = confidenceOverride ?? probabilities[bestLabel];
 
     return { label: bestLabel, confidence, probabilities };
@@ -143,14 +134,12 @@ function createPredictionFromLogProbs(
 
 export class NaiveBayesClassifier {
     private _classPriors: Record<string, number>;
-    private _featureMeans: Record<string, number[]>;
-    private _featureVariances: Record<string, number[]>;
+    private _featureWeights: Record<string, number[]>;
     private _fitted: boolean;
 
     constructor() {
         this._classPriors = {};
-        this._featureMeans = {};
-        this._featureVariances = {};
+        this._featureWeights = {};
         this._fitted = false;
     }
 
@@ -163,17 +152,24 @@ export class NaiveBayesClassifier {
     }
 
     /**
-     * Train the classifier
+     * Train the classifier using Multinomial Naive Bayes
      */
     fit(vectors: number[][], labels: string[]): this {
         const { labelCounts, featuresByLabel } = groupVectorsByLabel(vectors, labels);
         const totalSamples = labels.length;
+        const nFeatures = vectors[0].length;
 
-        this._computeStatistics(featuresByLabel, labelCounts, totalSamples);
+        // Compute feature sums per class and multinomial log-probabilities
+        Object.entries(featuresByLabel).forEach(([label, labelVectors]) => {
+            const classSums = sumFeatures(labelVectors);
+            this._classPriors[label] = labelCounts[label] / totalSamples;
+            this._featureWeights[label] = computeMultinomialLogProbs(classSums, nFeatures);
+        });
+
         this._fitted = true;
 
         console.log(
-            `Naive Bayes: Trained on ${totalSamples} samples, ${this.classes.length} classes`,
+            `Multinomial NB: Trained on ${totalSamples} samples, ${this.classes.length} classes`,
         );
         return this;
     }
@@ -182,7 +178,7 @@ export class NaiveBayesClassifier {
      * Predict class for a single vector
      * @param vector - Feature vector to classify
      * @param allowedClasses - Optional list of classes to consider (filters output)
-     * @param fastMode - When true, only computes probabilities for allowed classes (faster but no "neither" detection)
+     * @param fastMode - When true, only computes scores for allowed classes (faster but no "neither" detection)
      */
     predict(vector: number[], allowedClasses?: string[], fastMode = false): PredictionResult {
         if (!this._fitted) {
@@ -191,53 +187,53 @@ export class NaiveBayesClassifier {
 
         const hasFilter = allowedClasses && allowedClasses.length > 0;
 
-        // Fast mode: only compute probabilities for allowed classes
+        // Fast mode: only compute scores for allowed classes
         if (fastMode && hasFilter) {
             return this._predictFiltered(vector, allowedClasses);
         }
 
-        // Compute all probabilities
-        const allLogProbs = this._computeAllLogProbs(vector);
+        // Compute all scores
+        const allScores = this._computeAllScores(vector);
 
         // No filtering: return normal prediction
         if (!hasFilter) {
-            return createPredictionFromLogProbs(allLogProbs);
+            return createPredictionFromScores(allScores);
         }
 
         // Filter and check for "neither" case
-        return NaiveBayesClassifier._predictWithNeitherDetection(allLogProbs, allowedClasses);
+        return NaiveBayesClassifier._predictWithNeitherDetection(allScores, allowedClasses);
     }
 
     /**
      * Predict with only allowed classes (fast mode)
      */
     private _predictFiltered(vector: number[], allowedClasses: string[]): PredictionResult {
-        const logProbs = this._computeLogProbsForClasses(vector, allowedClasses);
+        const scores = this._computeScoresForClasses(vector, allowedClasses);
 
-        if (Object.keys(logProbs).length === 0) {
+        if (Object.keys(scores).length === 0) {
             return createFallbackResult(allowedClasses[0]);
         }
 
-        return createPredictionFromLogProbs(logProbs);
+        return createPredictionFromScores(scores);
     }
 
     /**
-     * Predict with "neither" detection - uses all probabilities to detect non-matching text
+     * Predict with "neither" detection - uses all scores to detect non-matching text
      */
     private static _predictWithNeitherDetection(
-        allLogProbs: Record<string, number>,
+        allScores: Record<string, number>,
         allowedClasses: string[],
     ): PredictionResult {
-        const allProbabilities = normalizeProbabilities(allLogProbs);
-        const overallBestLabel = findBestLabel(allLogProbs);
-        const filteredLogProbs = filterLogProbs(allLogProbs, allowedClasses);
+        const allProbabilities = normalizeProbabilities(allScores);
+        const overallBestLabel = findBestLabel(allScores);
+        const filteredScores = filterScores(allScores, allowedClasses);
 
-        if (Object.keys(filteredLogProbs).length === 0) {
+        if (Object.keys(filteredScores).length === 0) {
             return createFallbackResult(allowedClasses[0]);
         }
 
-        const bestLabel = findBestLabel(filteredLogProbs);
-        const filteredProbabilities = normalizeProbabilities(filteredLogProbs);
+        const bestLabel = findBestLabel(filteredScores);
+        const filteredProbabilities = normalizeProbabilities(filteredScores);
 
         // Use original probability if best match is outside allowed (indicates "neither")
         const isOutsideAllowed = !allowedClasses.includes(overallBestLabel);
@@ -249,26 +245,23 @@ export class NaiveBayesClassifier {
     }
 
     /**
-     * Compute log probabilities for specific classes only
+     * Compute scores for specific classes only
      */
-    private _computeLogProbsForClasses(
-        vector: number[],
-        classes: string[],
-    ): Record<string, number> {
-        const logProbs: Record<string, number> = {};
+    private _computeScoresForClasses(vector: number[], classes: string[]): Record<string, number> {
+        const scores: Record<string, number> = {};
         classes.forEach((label) => {
             if (label in this._classPriors) {
-                logProbs[label] = this._computeLogProb(vector, label);
+                scores[label] = this._computeScore(vector, label);
             }
         });
-        return logProbs;
+        return scores;
     }
 
     /**
      * Predict classes for multiple vectors
      * @param vectors - Feature vectors to classify
      * @param allowedClasses - Optional list of classes to consider (filters output)
-     * @param fastMode - When true, only computes probabilities for allowed classes
+     * @param fastMode - When true, only computes scores for allowed classes
      */
     predictBatch(
         vectors: number[][],
@@ -284,8 +277,7 @@ export class NaiveBayesClassifier {
     toJSON(): ClassifierData {
         return {
             classPriors: this._classPriors,
-            featureMeans: this._featureMeans,
-            featureVariances: this._featureVariances,
+            featureWeights: this._featureWeights,
         };
     }
 
@@ -295,61 +287,37 @@ export class NaiveBayesClassifier {
     static fromJSON(data: ClassifierData): NaiveBayesClassifier {
         const classifier = new NaiveBayesClassifier();
         classifier._classPriors = data.classPriors;
-        classifier._featureMeans = data.featureMeans;
-        classifier._featureVariances = data.featureVariances;
+        classifier._featureWeights = data.featureWeights;
         classifier._fitted = true;
         return classifier;
     }
 
     /**
-     * Compute statistics for all labels
+     * Compute scores for all classes
      */
-    private _computeStatistics(
-        featuresByLabel: Record<string, number[][]>,
-        labelCounts: Record<string, number>,
-        totalSamples: number,
-    ): void {
-        Object.entries(featuresByLabel).forEach(([label, labelVectors]) => {
-            this._classPriors[label] = labelCounts[label] / totalSamples;
-            this._featureMeans[label] = computeMeans(labelVectors);
-            this._featureVariances[label] = computeVariances(
-                labelVectors,
-                this._featureMeans[label],
-            );
-        });
-    }
-
-    /**
-     * Compute log probabilities for all classes
-     */
-    private _computeAllLogProbs(vector: number[]): Record<string, number> {
-        const logProbs: Record<string, number> = {};
+    private _computeAllScores(vector: number[]): Record<string, number> {
+        const scores: Record<string, number> = {};
         this.classes.forEach((label) => {
-            logProbs[label] = this._computeLogProb(vector, label);
+            scores[label] = this._computeScore(vector, label);
         });
-        return logProbs;
+        return scores;
     }
 
     /**
-     * Compute log probability using Gaussian Naive Bayes
+     * Compute Multinomial NB score for a class.
+     * score = log P(class) + Σ x_i * logProb[class][i]
      */
-    private _computeLogProb(vector: number[], label: string): number {
-        const means = this._featureMeans[label];
-        const variances = this._featureVariances[label];
-
-        let logProb = Math.log(this._classPriors[label]);
+    private _computeScore(vector: number[], label: string): number {
+        const logProbs = this._featureWeights[label];
+        let score = Math.log(this._classPriors[label]);
 
         vector.forEach((val, i) => {
             if (val > 0) {
-                const mean = means[i];
-                const variance = variances[i];
-                const diff = val - mean;
-                logProb -= 0.5 * Math.log(2 * Math.PI * variance);
-                logProb -= (diff * diff) / (2 * variance);
+                score += val * logProbs[i];
             }
         });
 
-        return logProb;
+        return score;
     }
 }
 
