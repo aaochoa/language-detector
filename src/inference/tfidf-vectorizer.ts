@@ -107,6 +107,14 @@ export class TfidfVectorizer {
             }
         });
 
+        // L2 normalization: divide each element by the Euclidean norm
+        const norm = Math.sqrt(vector.reduce((sum, val) => sum + val * val, 0));
+        if (norm > 0) {
+            vector.forEach((_val, i) => {
+                vector[i] /= norm;
+            });
+        }
+
         return vector;
     }
 
