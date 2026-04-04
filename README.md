@@ -1,11 +1,11 @@
-# Gaussian Naive Bayes - Language Detector
+# Multinomial Naive Bayes - Language Detector
 
 [![npm version](https://img.shields.io/npm/v/naive-bayes-language-detector.svg)](https://www.npmjs.com/package/naive-bayes-language-detector)
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg)](https://opensource.org/licenses/ISC)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D20-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)](https://www.typescriptlang.org/)
 
-A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Built with [TypeScript](https://www.typescriptlang.org/) and powered by [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectorization and [Gaussian Naive Bayes](https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Gaussian_naive_Bayes) classification.
+A **Naive Bayes language detector** optimized for short, informal text like SMS and chat messages. Built with [TypeScript](https://www.typescriptlang.org/) and powered by [TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf) vectorization and [Multinomial Naive Bayes](https://en.wikipedia.org/wiki/Naive_Bayes_classifier#Multinomial_naive_Bayes) classification.
 
 ## Supported Languages
 
@@ -68,11 +68,11 @@ const results = detector.detectBatch(['hello', 'hola', 'bonjour', 'ciao', 'oi'])
 
 Three pre-trained models are bundled with the package, trading off size and speed against accuracy:
 
-| Size     | Vocabulary | Accuracy           | Model size |
-| -------- | ---------- | ------------------ | ---------- |
-| `small`  | 1,000      | 97.21% (1116/1148) | ~0.4 MB    |
-| `medium` | 3,000      | 99.48% (1142/1148) | ~1.1 MB    |
-| `large`  | 5,000      | 99.39% (1141/1148) | ~1.7 MB    |
+| Size     | Vocabulary | Accuracy            | Model size |
+| -------- | ---------- | ------------------- | ---------- |
+| `small`  | 1,000      | 96.98% (1148 cases) | ~165 KB    |
+| `medium` | 3,000      | 96.34% (1148 cases) | ~499 KB    |
+| `large`  | 5,000      | 100% (1148 cases)   | ~837 KB    |
 
 ```typescript
 import { getDetector, getModelPath } from 'naive-bayes-language-detector';
@@ -223,7 +223,7 @@ const vector = vectorizer.transform('hello world');
 
 ### Naive Bayes Classifier
 
-[Gaussian Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes) classifier for language prediction.
+[Multinomial Naive Bayes](https://scikit-learn.org/stable/modules/naive_bayes.html#multinomial-naive-bayes) classifier for language prediction.
 
 ```typescript
 import { NaiveBayesClassifier } from 'naive-bayes-language-detector';
@@ -399,12 +399,12 @@ npm install
 
 ## Performance
 
-| Metric         | small         | medium        | large                    |
-| -------------- | ------------- | ------------- | ------------------------ |
-| Inference time | <5ms per text | <5ms per text | <5ms per text            |
-| Model size     | ~0.4 MB       | ~1.1 MB       | ~1.7 MB                  |
-| Accuracy       | 97.21%        | 99.48%        | 99.39% (1148 test cases) |
-| Memory usage   | ~15 MB loaded | ~30 MB loaded | ~50 MB loaded            |
+| Metric         | small         | medium        | large                   |
+| -------------- | ------------- | ------------- | ----------------------- |
+| Inference time | <5ms per text | <5ms per text | <5ms per text           |
+| Model size     | ~165 KB       | ~499 KB       | ~837 KB                 |
+| Accuracy       | 96.98%        | 96.34%        | 100% (1148 test cases)  |
+| Memory usage   | ~15 MB loaded | ~30 MB loaded | ~50 MB loaded           |
 
 ## License
 
