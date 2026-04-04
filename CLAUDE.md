@@ -46,7 +46,7 @@ The `size` field is stored in the saved model JSON and typed as `ModelSize = 'sm
 
 ## Architecture
 
-Detection uses a two-signal pipeline: **ML** (TF-IDF + Gaussian Naive Bayes) and **slang dictionary lookup**. Which signal wins depends on text length and confidence thresholds defined as constants at the top of `src/inference/detector.ts`.
+Detection uses a two-signal pipeline: **ML** (TF-IDF + Multinomial Naive Bayes) and **slang dictionary lookup**. Which signal wins depends on text length and confidence thresholds defined as constants at the top of `src/inference/detector.ts`.
 
 ```text
 Input → TextNormalizer → TfidfVectorizer → NaiveBayesClassifier ─┐
@@ -73,7 +73,7 @@ Input → SlangDictionaries (Set<string> per language) ────────�
 | ----------------------------------- | --------------------------------------------------------------------------------------------- |
 | `src/inference/detector.ts`         | `LanguageDetector` class + singleton `getDetector()`                                          |
 | `src/inference/tfidf-vectorizer.ts` | Character n-gram TF-IDF; feature count determined by model size                               |
-| `src/inference/naive-bayes.ts`      | Gaussian Naive Bayes classifier with `predict(vector, allowedLanguages?, fastMode?)`          |
+| `src/inference/naive-bayes.ts`      | Multinomial Naive Bayes classifier with `predict(vector, allowedLanguages?, fastMode?)`       |
 | `src/utils/slang-dictionaries.ts`   | Aggregates per-language `Set<string>` from `*.data.js` files                                  |
 | `src/utils/slang-*.data.js`         | Raw slang/abbreviation word lists per language (~4,600+ total terms)                          |
 | `src/utils/text-normalizer.ts`      | `normalizeText` (strips URLs, emails, phone numbers, lowercases) + `augmentText` for training |

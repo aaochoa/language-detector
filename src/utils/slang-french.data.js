@@ -243,6 +243,8 @@ const FRENCH_SLANG = new Set([
     'mortel de rire',
     'enorme',
     'dingue',
+    'fou', // crazy
+    'ca me rend fou', // drives me crazy
     'ohlala',
     'oh lala',
     'olala',

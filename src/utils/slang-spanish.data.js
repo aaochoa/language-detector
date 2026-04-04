@@ -85,6 +85,7 @@ const SPANISH_SLANG = new Set([
     'xqe',
     'pke',
     'xqq',
+    'porque',
     'porke', // porque
     'xfa',
     'porfa',
@@ -1775,6 +1776,10 @@ const SPANISH_SLANG = new Set([
     'kehaces', // what are you doing
 
     // === Disambiguation (Spanish-specific phrases) ===
+    'viniste', // preterite of venir (PT would be "vieste")
+    'fuiste', // preterite of ir/ser (PT would be "foste")
+    'hiciste', // preterite of hacer (PT would be "fizeste")
+    'dijiste', // preterite of decir (PT would be "disseste")
     'que emocion',
     'te cuidas',
     'cuida te',

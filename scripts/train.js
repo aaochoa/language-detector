@@ -123,7 +123,6 @@ function processBatch(batch, lang, vectorizer, stats) {
 
                 vector.forEach((value, idx) => {
                     stats.featureSums[lang][idx] += value;
-                    stats.featureSumSquares[lang][idx] += value * value;
                 });
             });
         }
@@ -136,14 +135,12 @@ function trainInBatches(vectorizer, maxSamplesPerLanguage, batchSize, maxFeature
     const stats = {
         classCounts: {},
         featureSums: {},
-        featureSumSquares: {},
         totalSamples: 0,
     };
 
     LANGUAGES.forEach((lang) => {
         stats.classCounts[lang] = 0;
         stats.featureSums[lang] = new Array(maxFeatures).fill(0);
-        stats.featureSumSquares[lang] = new Array(maxFeatures).fill(0);
     });
 
     LANGUAGES.forEach((lang) => {
@@ -165,28 +162,27 @@ function trainInBatches(vectorizer, maxSamplesPerLanguage, batchSize, maxFeature
         }
     });
 
-    console.log('\n  Building classifier from statistics...');
+    console.log('\n  Building Multinomial NB classifier from statistics...');
     const classifier = new NaiveBayesClassifier();
 
-    const featureMeans = {};
-    const featureVariances = {};
     const classPriors = {};
+    const featureWeights = {};
+    const alpha = 1.0;
 
     LANGUAGES.forEach((lang) => {
-        const count = stats.classCounts[lang];
-        classPriors[lang] = count / stats.totalSamples;
+        classPriors[lang] = stats.classCounts[lang] / stats.totalSamples;
 
-        featureMeans[lang] = stats.featureSums[lang].map((sum) => sum / count);
-        featureVariances[lang] = stats.featureSumSquares[lang].map((sumSq, idx) => {
-            const mean = featureMeans[lang][idx];
-            const variance = sumSq / count - mean * mean;
-            return Math.max(variance, 1e-9);
-        });
+        // Multinomial log-probabilities with Laplace smoothing
+        const classTotal = stats.featureSums[lang].reduce((sum, val) => sum + val, 0);
+        const denominator = classTotal + alpha * maxFeatures;
+
+        featureWeights[lang] = stats.featureSums[lang].map(
+            (count) => Math.log((count + alpha) / denominator),
+        );
     });
 
     classifier._classPriors = classPriors;
-    classifier._featureMeans = featureMeans;
-    classifier._featureVariances = featureVariances;
+    classifier._featureWeights = featureWeights;
     classifier._fitted = true;
 
     console.log(

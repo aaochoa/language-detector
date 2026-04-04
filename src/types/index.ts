@@ -76,12 +76,11 @@ export interface VectorizerData {
 }
 
 /**
- * Serialized Naive Bayes Classifier data
+ * Serialized Naive Bayes Classifier data (Complement NB)
  */
 export interface ClassifierData {
     classPriors: Record<string, number>;
-    featureMeans: Record<string, number[]>;
-    featureVariances: Record<string, number[]>;
+    featureWeights: Record<string, number[]>;
 }
 
 /**
